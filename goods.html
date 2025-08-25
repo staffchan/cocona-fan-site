@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Goods | Cocona Fan Site</title>
+
+  <!-- 見出し/ナビ: Dancing Script、本文: Zen Kaku -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fffaf7; --ink:#222; --ink-sub:#6b6464;
+      --accent:#f39ac6; --warm:#ffdfa8; --line:#f5d7e6; --card:#fff;
+      --nav-size:clamp(16px,1.9vw,22px);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      background: linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+      color:var(--ink);
+      font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      line-height:1.9;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:0 16px}
+
+    /* ===== Header（タイトルとナビを同じ段） ===== */
+    header{position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--line)}
+    .head{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:10px 0}
+    .brand{font:700 22px "Dancing Script", cursive; color:#af4a7f}
+
+    .nav{display:flex; gap:34px; align-items:center}
+    .nav a{
+      color:var(--ink);
+      font-family:"Dancing Script", cursive;
+      font-weight:700; font-size:var(--nav-size); line-height:1.1;
+      padding:8px 2px; position:relative;
+    }
+    .nav a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s}
+    .nav a:hover::after{background:var(--accent)}
+    .nav a.active::after{background:var(--accent)}
+
+    /* ===== Hero（共通のふんわり帯） ===== */
+    .hero{
+      position:relative; display:grid; place-items:center;
+      padding:44px 0; min-height:clamp(200px,24vh,300px);
+      background:linear-gradient(90deg,#FFEAF6,#FFE1C2);
+      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    }
+    .hero .title{
+      margin:0; text-align:center; color:#fff; text-shadow:0 6px 24px rgba(0,0,0,.25);
+      font:700 clamp(46px,7.2vw,84px) "Dancing Script", cursive; line-height:1.05; letter-spacing:.5px;
+    }
+    .hero::before,.hero::after{
+      content:""; position:absolute; left:16px; right:16px; height:1px; background:rgba(255,255,255,.9); z-index:0
+    }
+    .hero::before{top:6px} .hero::after{top:10px; opacity:.6}
+    .hero .wrap{position:relative; z-index:1}
+
+    /* ===== Cards（タイル全体がリンク。ホバーで反転） ===== */
+    main{margin:18px 0 32px}
+    .section{padding:12px 0}
+    h2.sec{margin:14px 0 10px; font-weight:700; font-size:1.15rem; color:#a24d7f}
+
+    .grid{
+      display:grid; gap:14px;
+      grid-template-columns:repeat(1,minmax(0,1fr));
+    }
+    @media (min-width:720px){ .grid{ grid-template-columns:repeat(2,minmax(0,1fr)) } }
+    @media (min-width:980px){ .grid{ grid-template-columns:repeat(3,minmax(0,1fr)) } }
+
+    .tile{
+      display:flex; flex-direction:column; gap:8px;
+      padding:16px; border:1px solid var(--line); border-radius:16px;
+      background:var(--card); box-shadow:0 4px 12px rgba(0,0,0,.06);
+      transition:.2s ease; cursor:pointer;
+    }
+    .tile:hover, .tile:focus-visible{
+      outline:none;
+      background:linear-gradient(90deg,var(--accent),var(--warm));
+      color:#fff; border-color:transparent; transform:translateY(-2px);
+      box-shadow:0 10px 22px rgba(0,0,0,.12);
+    }
+    .badge{
+      width:44px; height:44px; border-radius:50%;
+      display:grid; place-items:center; font-weight:700;
+      background:linear-gradient(90deg,var(--accent),var(--warm)); color:#fff;
+      box-shadow:0 4px 10px rgba(0,0,0,.12); user-select:none
+    }
+    .tile:hover .badge{ background:rgba(255,255,255,.22); border:1px solid rgba(255,255,255,.5) }
+    .title{font-weight:700; font-size:1.05rem}
+    .desc{color:var(--ink-sub); font-size:.95rem}
+    .tile:hover .desc{color:#fff}
+    .note{margin-top:2px; color:var(--ink-sub); font-size:.85rem}
+    .tile:hover .note{color:#fff}
+
+    footer{background:#ffe9e0; text-align:center; padding:20px; border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap head">
+      <div class="brand">Cocona Fan Site</div>
+      <nav class="nav" aria-label="Global">
+        <a href="index.html">Top</a>
+        <a href="about_cocona.html">About</a>
+        <a href="story.html">Story</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="songs.html">Songs</a>
+        <a class="active" href="goods.html" aria-current="page">Goods</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <h1 class="title">Goods</h1>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <!-- GPTs -->
+    <section class="section">
+      <h2 class="sec">Cocona GPTs</h2>
+      <div class="grid">
+        <a class="tile" href="https://chatgpt.com/g/g-6899db5ead788191b2257dcd4121f4fa-kokonaherumetuto" target="_blank" rel="noopener">
+          <div class="badge">GPT</div>
+          <div class="title">ココナと雑談（Japanese）</div>
+          <p class="desc">ココナとゆるっとおしゃべり。世界の卵料理や日常のことまで。</p>
+          <p class="note">ChatGPT が新しいタブで開きます。</p>
+        </a>
+
+        <a class="tile" href="https://chatgpt.com/g/g-68a3180f859081919a07b0ddd6d46bf1-coconas-egg-chat" target="_blank" rel="noopener">
+          <div class="badge">GPT</div>
+          <div class="title">Cocona’s Egg Chat（English）</div>
+          <p class="desc">Ask Cocona about egg dishes around the world — recipes, trivia, and more!</p>
+          <p class="note">ChatGPT が新しいタブで開きます。</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- LINE Stickers -->
+    <section class="section">
+      <h2 class="sec">LINE Stickers</h2>
+      <div class="grid">
+        <a class="tile" href="https://line.me/S/sticker/31449048?_from=lcm" target="_blank" rel="noopener">
+          <div class="badge">LINE</div>
+          <div class="title">ココナのスタンプ（第1弾）</div>
+          <p class="desc">トークがほっこりする、ココナの表情いろいろ。日常使いにぴったり。</p>
+          <p class="note">LINE STORE が新しいタブで開きます。</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>© 2025 ココナファンサイト</p>
+    </div>
+  </footer>
+</body>
+</html>

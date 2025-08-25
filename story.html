@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Story | Cocona Fan Site</title>
+
+  <!-- 見出し/ナビ: Dancing Script、本文: Zen Kaku -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fffaf7; --ink:#222; --muted:#6b6464;
+      --accent:#f39ac6; --warm:#ffdfa8; --line:#f5d7e6; --card:#fff;
+      --nav-size:clamp(16px,1.9vw,22px);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    html{scroll-behavior:smooth}
+    body{
+      background: linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+      color:var(--ink);
+      font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      line-height:1.9;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+
+    /* ===== Header（ロゴとナビを同じ段・常に白地） ===== */
+    header{
+      position:sticky; top:0; z-index:50;
+      background:#fff; border-bottom:1px solid var(--line);
+      backdrop-filter:saturate(120%) blur(6px);
+    }
+    .bar{display:flex; align-items:center; gap:18px; padding:10px 0}
+    .brand{font:700 24px "Dancing Script", cursive; color:#af4a7f; white-space:nowrap}
+    nav[aria-label="global"]{margin-left:auto; display:flex; flex-wrap:wrap; gap:26px; align-items:center}
+    nav[aria-label="global"] a{
+      font:700 var(--nav-size) "Dancing Script", cursive;
+      color:var(--ink); position:relative; padding:6px 2px; line-height:1.1;
+    }
+    nav[aria-label="global"] a::after{
+      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+      background:transparent; transition:.2s;
+    }
+    nav[aria-label="global"] a:hover::after,
+    nav[aria-label="global"] a.active::after{ background:var(--accent); }
+
+    /* ===== HERO（Gallery/Aboutと同じ） ===== */
+    .hero{
+      position:relative;
+      display:grid; place-items:center;
+      padding:44px 0;
+      min-height:clamp(200px,24vh,300px);
+      background:linear-gradient(90deg,#FFEAF6,#FFE1C2);
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+    }
+    .hero .title{
+      margin:0; text-align:center;
+      color:#fff;
+      text-shadow:0 6px 24px rgba(0,0,0,.25);
+      font:700 clamp(46px,7.2vw,84px) "Dancing Script", cursive;
+      line-height:1.05; letter-spacing:.5px;
+    }
+    /* 上端の二重ライン */
+    .hero::before,.hero::after{
+      content:""; position:absolute; left:16px; right:16px; height:1px;
+      background:rgba(255,255,255,.9); z-index:0;
+    }
+    .hero::before{ top:6px }
+    .hero::after { top:10px; opacity:.6 }
+    .hero .wrap{ position:relative; z-index:1 }
+
+    /* 反転対策（スクロール時も白文字のまま） */
+    body.scrolled .hero{
+      background:linear-gradient(90deg,#FFEAF6,#FFE1C2) !important;
+    }
+    body.scrolled .hero .title{
+      color:#fff !important; text-shadow:0 6px 24px rgba(0,0,0,.25) !important;
+    }
+
+    /* ===== Content ===== */
+    main{margin-top:8px}
+    .panel{
+      background:var(--card); border:1px solid var(--line); border-radius:16px;
+      padding:14px; box-shadow:0 4px 12px rgba(0,0,0,.06);
+    }
+
+    .story-flex{
+      display:grid; gap:14px; align-items:stretch;
+      grid-template-columns:1fr;              /* SP */
+    }
+    @media(min-width:960px){
+      .story-flex{ grid-template-columns:1.1fr 1.4fr; }
+    }
+
+    .visual{
+      border:1px solid var(--line); border-radius:14px; overflow:hidden;
+      min-height:260px; background:#fff;
+    }
+    .visual .thumb{
+      width:100%; height:100%; min-height:260px;
+      background: url('media/feature-story.PNG') center 12% / cover no-repeat; /* ← 位置はここで微調整可 */
+    }
+    @media(min-width:960px){ .visual .thumb{ min-height:420px } }
+
+    .chapters{ display:grid; gap:10px }
+    .note{ color:var(--muted); font-size:.95rem; margin:0 0 6px }
+
+    .btn{
+      display:flex; align-items:center; gap:10px;
+      padding:14px 16px; border:1px solid var(--line); border-radius:14px;
+      background:#fff; cursor:pointer;
+      box-shadow:0 2px 8px rgba(0,0,0,.04);
+    }
+    .btn:hover{ background:#fffefe }
+    .badge{
+      flex:0 0 auto; display:inline-grid; place-items:center;
+      width:42px; height:42px; border-radius:10px;
+      background:linear-gradient(90deg,var(--accent),var(--warm)); color:#fff; font-weight:700;
+      box-shadow:0 4px 10px rgba(0,0,0,.12);
+    }
+    .btn .t{ font-weight:700; color:#a24d7f }
+    .btn .s{ color:var(--muted); font-size:.92rem }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="wrap bar">
+      <div class="brand">Cocona Fan Site</div>
+      <nav aria-label="global">
+        <a href="index.html">Top</a>
+        <a href="about_cocona.html">About</a>
+        <a class="active" href="story.html">Story</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="songs.html">Songs</a>
+        <a href="goods.html">Goods</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <h1 class="title">Story</h1>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="panel" aria-label="ココナ物語">
+      <div class="story-flex">
+        <!-- 左：ビジュアル -->
+        <figure class="visual" aria-hidden="true">
+          <div class="thumb"></div>
+        </figure>
+
+        <!-- 右：章ボタン一覧 -->
+        <div>
+          <p class="note">読みたい章を選んでね。</p>
+          <div class="chapters" role="list">
+            <a class="btn" href="prologue.html" role="listitem">
+              <span class="badge">序</span>
+              <span>
+                <span class="t">序章　— 田舎の朝、卵の香り —</span><br>
+                <span class="s">ココナの原点、祖母の台所と朝の養鶏場。</span>
+              </span>
+            </a>
+
+            <a class="btn" href="ch1.html" role="listitem">
+              <span class="badge">1</span>
+              <span>
+                <span class="t">第1章　— 上京、そして運命の一皿 —</span><br>
+                <span class="s">黄金色の半熟が、世界の扉を開く。</span>
+              </span>
+            </a>
+
+            <a class="btn" href="ch2.html" role="listitem">
+              <span class="badge">2</span>
+              <span>
+                <span class="t">第2章　— 卵は、世界のパスポート —</span><br>
+                <span class="s">卵を“踊らせる”。マルセルの教え。</span>
+              </span>
+            </a>
+
+            <a class="btn" href="ch3.html" role="listitem">
+              <span class="badge">3</span>
+              <span>
+                <span class="t">第3章　— 初めての空と、スペインの卵 —</span><br>
+                <span class="s">雲はメレンゲ、路地はオリーブの香り。</span>
+              </span>
+            </a>
+
+            <a class="btn" href="ch4.html" role="listitem">
+              <span class="badge">4</span>
+              <span>
+                <span class="t">第4章　— 屋台の煙と、黄金色のカイジアオ —</span><br>
+                <span class="s">カリッとふち、ふわっと心。汁のシミも旅の模様。</span>
+              </span>
+            </a>
+
+            <a class="btn" href="ch5.html" role="listitem">
+              <span class="badge">5</span>
+              <span>
+                <span class="t">第5章　— パリの小さな厨房で —</span><br>
+                <span class="s">“食べたら笑顔になる卵料理”へ。</span>
+              </span>
+            </a>
+
+            <a class="btn" href="ch6.html" role="listitem">
+              <span class="badge">6</span>
+              <span>
+                <span class="t">第6章　— リマの空に、卵は落ちた —</span><br>
+                <span class="s">弱火の失敗、でも「腹は満たされた」。</span>
+              </span>
+            </a>
+
+            <a class="btn" href="ch7.html" role="listitem">
+              <span class="badge">7</span>
+              <span>
+                <span class="t">第7章　— 卵の地図がつながるとき —</span><br>
+                <span class="s">君はもう、世界の地図を持ってる。</span>
+              </span>
+            </a>
+
+            <a class="btn" href="final.html" role="listitem">
+              <span class="badge">終</span>
+              <span>
+                <span class="t">最終章　— 世界一の卵フェス —</span><br>
+                <span class="s">ぜんぶの国をひと皿に。夜空までの湯気。</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap" style="text-align:center;padding:20px 0;border-top:1px solid var(--line);margin-top:8px">
+    <p>© 2025 ココナファンサイト</p>
+  </footer>
+</body>
+</html>

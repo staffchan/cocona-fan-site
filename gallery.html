@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gallery | Cocona Fan Site</title>
+
+  <!-- 見出し/ナビ: Dancing Script、本文: Zen Kaku -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fffaf7; --ink:#222; --ink-sub:#6b6464;
+      --accent:#f39ac6; --warm:#ffdfa8; --line:#f1e6ed; --card:#fff;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      background:linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+      color:var(--ink);
+      font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      line-height:1.9;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:0 16px}
+
+    /* ===== 共通ナビ（白地×黒字） ===== */
+    .site-header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line);}
+    .site-header .bar{display:flex; align-items:center; gap:20px; padding:10px 16px;}
+    .site-header .brand{font:700 20px/1 "Dancing Script",cursive; color:#af4a7f;}
+    .navbar{margin-left:auto; display:flex; gap:28px;}
+    .navbar a{
+      font:700 clamp(16px,1.8vw,20px) "Dancing Script",cursive;
+      color:#222; position:relative; padding:8px 0; letter-spacing:.02em;
+    }
+    .navbar a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s;}
+    .navbar a:hover::after, .navbar a.active::after{
+      background:linear-gradient(90deg, var(--accent), var(--warm));
+    }
+
+    /* ===== ヒーロー（ギャラリー既視感のデザイン） ===== */
+    .hero{
+      position:relative; display:grid; place-items:center;
+      padding:44px 0; min-height:clamp(200px,24vh,300px);
+      background:linear-gradient(90deg,#FFEAF6,#FFE1C2);
+      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    }
+    .hero .title{
+      margin:0; text-align:center; color:#fff;
+      text-shadow:0 6px 24px rgba(0,0,0,.25);
+      font:700 clamp(46px,7.2vw,84px) "Dancing Script",cursive; line-height:1.05; letter-spacing:.5px;
+    }
+    .hero::before,.hero::after{
+      content:""; position:absolute; left:16px; right:16px; height:1px; background:rgba(255,255,255,.9);
+    }
+    .hero::before{ top:6px } .hero::after{ top:10px; opacity:.6 }
+    .hero .wrap{ position:relative; z-index:1 }
+
+    /* ===== パネル／フィルタ／グリッド ===== */
+    main{margin-top:8px}
+    .panel{
+      background:var(--card); border:1px solid var(--line); border-radius:16px;
+      padding:14px; box-shadow:0 4px 12px rgba(0,0,0,.06);
+    }
+    .filters{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px}
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border:1px solid #f0e2ea; border-radius:999px;
+      background:#fff; cursor:pointer; user-select:none; font-weight:700; font-size:.95rem;
+    }
+    .chip[data-active="true"]{
+      background:linear-gradient(90deg,var(--accent),var(--warm)); color:#fff; border-color:transparent;
+    }
+    .count{margin-left:auto; color:var(--ink-sub); font-size:.9rem}
+
+    .grid{
+      display:grid; gap:12px;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+    }
+    @media (min-width:860px){
+      .grid{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+    }
+
+    /* 画像サムネ（拡大なし） */
+    .card{
+      border:1px solid var(--line); border-radius:14px; overflow:hidden;
+      background:#fff; display:flex; align-items:center; justify-content:center;
+      aspect-ratio:4/3; position:relative; box-shadow:0 2px 8px rgba(0,0,0,.04);
+      cursor:default; /* ← 拡大なしなのでポインタにしない */
+    }
+    .card img{
+      width:100%; height:100%; object-fit:contain; display:block; background:#fff;
+    }
+    /* タイトル帯：横幅いっぱい */
+    .cap{
+      position:absolute; left:0; right:0; bottom:0;
+      padding:10px 12px; border-top:1px solid #f1d6e5;
+      background:linear-gradient(90deg, #ffe8f3, #ffefd9);
+    }
+    .cap .t{
+      display:block; text-align:center; font-weight:700;
+      font-size:.95rem; color:#a24d7f; line-height:1.2;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+
+    footer{background:#ffe9e0;text-align:center;padding:20px;margin-top:32px;border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+  <!-- 共通ナビ -->
+  <header class="site-header">
+    <div class="wrap bar">
+      <div class="brand">Cocona Fan Site</div>
+      <nav class="navbar">
+        <a href="index.html">Top</a>
+        <a href="about_cocona.html">About</a>
+        <a href="story.html">Story</a>
+        <a class="active" href="gallery.html">Gallery</a>
+        <a href="songs.html">Songs</a>
+        <a href="goods.html">Goods</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ヒーロー -->
+  <section class="hero">
+    <div class="wrap">
+      <h1 class="title">Gallery</h1>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="panel" aria-label="フィルターとギャラリー">
+      <div class="filters">
+        <button class="chip" data-cat="all" data-active="true">ALL</button>
+        <button class="chip" data-cat="illust">イラスト</button>
+        <span class="count" id="count">0点</span>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+
+  <footer class="wrap" style="text-align:center;padding:20px 0;border-top:1px solid var(--line);margin-top:8px">
+    <p>© 2025 ココナファンサイト</p>
+  </footer>
+
+  <script>
+    // 画像リスト（PNGのみ）
+    const ITEMS = [
+      { src:'gallery/egg.PNG',           title:'生まれたてのCocona',   cats:['illust'] },
+      { src:'gallery/country-run.PNG',   title:'駆け回るCocona',       cats:['illust'] },
+      { src:'gallery/determination.PNG', title:'旅立ちの日',           cats:['illust'] },
+      { src:'gallery/cooking.PNG',       title:'卵料理研究家に',       cats:['illust'] },
+      { src:'gallery/trip.PNG',          title:'修行の旅に',           cats:['illust'] },
+      { src:'gallery/Egypt.PNG',         title:'エジプトにて',         cats:['illust'] },
+      { src:'gallery/France.PNG',        title:'フランスの街角',       cats:['illust'] },
+      { src:'gallery/japan.PNG',         title:'日本の温泉卵を堪能',   cats:['illust'] },
+      { src:'gallery/Earth.PNG',         title:'次の旅を計画中',       cats:['illust'] },
+    ];
+
+    const grid  = document.getElementById('grid');
+    const count = document.getElementById('count');
+    const chips = document.querySelectorAll('.chip');
+
+    function cardTemplate(it){
+      return `
+        <img src="${it.src}" alt="${it.title}" loading="lazy" decoding="async">
+        <figcaption class="cap"><span class="t">${it.title}</span></figcaption>
+      `;
+    }
+
+    function render(filter='all'){
+      grid.innerHTML = '';
+      const shown = ITEMS.filter(it => filter==='all' || it.cats.includes(filter));
+      shown.forEach(it => {
+        const fig = document.createElement('figure');
+        fig.className = 'card';
+        fig.setAttribute('data-cats', it.cats.join(','));
+        fig.innerHTML = cardTemplate(it);
+        grid.appendChild(fig);
+      });
+      count.textContent = shown.length + '点';
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.dataset.active = 'false');
+        chip.dataset.active = 'true';
+        render(chip.dataset.cat);
+      });
+    });
+
+    render('all');
+  </script>
+</body>
+</html>

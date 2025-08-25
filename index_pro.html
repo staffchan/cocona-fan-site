@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cocona Fan Site | Cocona Belmette</title>
+
+  <!-- Handwritten font -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Pastel palette */
+      --bg:#fffaf7;         /* soft white */
+      --ink:#333;           /* base text */
+      --ink-sub:#6b6464;    /* secondary text */
+      --accent:#f39ac6;     /* pastel pink */
+      --warm:#ffdfa8;       /* pastel yellow/orange */
+      --line:#f5d7e6;       /* pink line */
+      --card:#ffffffee;     /* translucent white cards */
+
+      --hero-shrink: 0;     /* 0→1 (scroll) */
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      background: linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+      color:var(--ink);
+      font-family:"Dancing Script", cursive; /* handwritten vibe site-wide */
+    }
+    a{color:#a55;text-decoration:none}
+
+    /* Header */
+    header{position:sticky; top:0; z-index:50; background:transparent}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+
+    .topbar{display:flex;align-items:center;gap:12px;padding:10px 0}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo h1{margin:0;font-size:22px;color:#af4a7f;font-weight:700}
+
+    /* Simple one-line nav */
+    .navbar{
+      display:flex;justify-content:center;gap:44px;color:#fff;padding:14px 0;position:relative
+    }
+    .navbar::before,.navbar::after{
+      content:"";position:absolute;left:16px;right:16px;height:1px;background:rgba(255,255,255,.92)
+    }
+    .navbar::before{top:4px}.navbar::after{bottom:4px}
+    .navbar a{
+      color:#fff;font-weight:700;letter-spacing:.02em;padding:8px 2px;position:relative
+    }
+    .navbar a::after{
+      content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:rgba(255,255,255,0);transition:.2s
+    }
+    .navbar a:hover::after{background:rgba(255,255,255,.95)}
+
+    /* On scroll: readable white bar */
+    body.scrolled .navbar{
+      background:rgba(255,255,255,.9);
+      backdrop-filter:blur(8px) saturate(1.05);
+      color:var(--ink);border-bottom:1px solid var(--line)
+    }
+    body.scrolled .navbar a{color:var(--ink)}
+    body.scrolled .navbar::before, body.scrolled .navbar::after{background:transparent}
+    body.scrolled .navbar a:hover::after{background:var(--accent)}
+
+    /* HERO (static image) + shrink effect */
+    .hero{
+      position:relative;
+      min-height: max(56vh, calc(72vh - var(--hero-shrink) * 24vh));
+      display:grid;place-items:center;overflow:hidden;
+      transition:min-height .2s ease;
+    }
+    .hero--image::before{
+      content:"";position:absolute;inset:0;
+      background:url("media/cocona-bg.PNG") center calc(18% + var(--hero-shrink) * 6%) / cover no-repeat;
+      filter:saturate(1.02) brightness(0.98);
+    }
+    .hero--image::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg, rgba(255,232,243,.55), rgba(255,223,168,.35) 65%, rgba(255,223,168,.15));
+      backdrop-filter:blur(calc(1.5px + var(--hero-shrink) * 1.5px));
+    }
+    .hero-inner{position:relative;z-index:1;text-align:center;padding:6vh 16px;transition:padding .2s ease}
+    .hero-title{
+      font-weight:700;font-size:clamp(40px, 7.5vw, 86px);color:#fff;
+      text-shadow:0 3px 18px rgba(0,0,0,.25);letter-spacing:.5px;margin:0;
+      transform:scale(calc(1 - var(--hero-shrink) * 0.15)) translateY(calc(var(--hero-shrink) * -6px));
+      transform-origin:center;transition:transform .2s ease;
+    }
+
+    /* Sections (below hero) */
+    main{margin-top:8px}
+    .section{padding:28px 0}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 6px 20px rgba(0,0,0,.06);padding:18px}
+    .grid{display:grid;gap:16px}
+    .grid.cols-3{grid-template-columns:1fr}
+    @media(min-width:860px){.grid.cols-3{grid-template-columns:repeat(3,1fr)}}
+
+    .btn{display:inline-block;padding:12px 16px;border-radius:14px;font-weight:700}
+    .btn.primary{background:var(--accent);color:#fff}
+    .btn.ghost{background:#fff;border:2px solid var(--warm);color:#b26b00}
+
+    footer{background:#ffe9e0;text-align:center;padding:20px;margin-top:32px;border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <div class="logo">
+        <h1>Cocona Fan Site</h1>
+      </div>
+    </div>
+
+    <!-- Nav: 8 items -->
+    <nav class="navbar">
+      <a href="#news">News</a>
+      <a href="about_cocona.html">About</a>
+      <a href="#story">Story</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="#songs">Songs</a>
+      <a href="gpts.html">Cocona GPTs</a>
+      <a href="#goods">Goods</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero hero--image">
+    <div class="wrap hero-inner">
+      <h1 class="hero-title">Welcome to Cocona's World</h1>
+    </div>
+  </section>
+
+  <main>
+    <!-- News -->
+    <section class="wrap section" id="news">
+      <div class="grid cols-3">
+        <div class="card">
+          <h3 style="margin:0 0 6px;color:#b04a81">News</h3>
+          <p style="margin:0;color:var(--ink-sub)">LINEスタンプ第1弾、準備中です。公開まで少し待ってね。</p>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 6px;color:#b04a81">Gallery</h3>
+          <p style="margin:0;color:var(--ink-sub)">新作を追加しました。<a href="gallery.html">→ 見にいく</a></p>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 6px;color:#b04a81">Cocona GPTs</h3>
+          <p style="margin:0;color:var(--ink-sub)">おしゃべり版を公開中！<a href="gpts.html">→ 開く</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Placeholders (will become pages later) -->
+    <section id="story" class="wrap section">
+      <div class="card"><h3 style="margin:0 0 6px;color:#b04a81">Story</h3>
+        <p style="margin:0;color:var(--ink-sub)">ココナの物語ページを準備中です。</p>
+      </div>
+    </section>
+
+    <section id="songs" class="wrap section">
+      <div class="card"><h3 style="margin:0 0 6px;color:#b04a81">Songs</h3>
+        <p style="margin:0;color:var(--ink-sub)">楽曲・BGMコーナーを準備中です。</p>
+      </div>
+    </section>
+
+    <section id="goods" class="wrap section">
+      <div class="card"><h3 style="margin:0 0 6px;color:#b04a81">Goods</h3>
+        <p style="margin:0;color:var(--ink-sub)">スタンプ＆グッズを準備中です。</p>
+      </div>
+    </section>
+
+    <section id="contact" class="wrap section">
+      <div class="card"><h3 style="margin:0 0 6px;color:#b04a81">Contact</h3>
+        <p style="margin:0;color:var(--ink-sub)">お問い合わせ窓口を準備中です。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 ココナファンサイト</p>
+  </footer>
+
+  <script>
+    // Navbar readability & hero shrink on scroll
+    const SHRINK_MAX = 220; // px to reach max shrink
+    addEventListener('scroll', () => {
+      const y = window.scrollY || 0;
+      const t = Math.min(1, y / SHRINK_MAX);
+      document.documentElement.style.setProperty('--hero-shrink', t.toFixed(3));
+      document.body.classList.toggle('scrolled', y > 40);
+    }, { passive: true });
+  </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 7 | Story | Cocona Fan Site</title>
+
+  <!-- 見出し/ナビ: Dancing Script、本文: Zen Kaku -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fffaf7; --ink:#222; --ink-sub:#6b6464;
+      --accent:#f39ac6; --warm:#ffdfa8; --line:#f5d7e6; --card:#fff;
+      --nav-size:clamp(16px,1.9vw,22px);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    html{scroll-behavior:smooth}
+    body{
+      background: linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+      color:var(--ink);
+      font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      line-height:1.9;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+
+    /* ===== 共通ナビ（白地×黒字） ===== */
+    .site-header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line, #f1e6ed);}
+    .site-header .bar{display:flex; align-items:center; gap:20px; padding:10px 16px;}
+    .site-header .brand{font:700 20px/1 "Dancing Script",cursive; color:#af4a7f;}
+    .navbar{margin-left:auto; display:flex; gap:28px;}
+    .navbar a{
+      font:700 clamp(16px,1.8vw,20px) "Dancing Script",cursive;
+      color:#222; position:relative; padding:8px 0; letter-spacing:.02em;
+    }
+    .navbar a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s;}
+    .navbar a:hover::after, .navbar a.active::after{
+      background:linear-gradient(90deg, var(--accent,#f39ac6), var(--warm,#ffdfa8));
+    }
+
+    /* ===== ヒーロー（ギャラリーと同テイスト） ===== */
+    .hero{
+      position:relative; display:grid; place-items:center;
+      padding:44px 0; min-height:clamp(200px,24vh,300px);
+      background:linear-gradient(90deg,#FFEAF6,#FFE1C2);
+      border-top:1px solid var(--line,#f1e6ed); border-bottom:1px solid var(--line,#f1e6ed);
+    }
+    .hero .title{
+      margin:0; text-align:center; color:#fff;
+      text-shadow:0 6px 24px rgba(0,0,0,.25);
+      font:700 clamp(46px,7.2vw,84px) "Dancing Script",cursive; line-height:1.05; letter-spacing:.5px;
+    }
+    .hero::before,.hero::after{
+      content:""; position:absolute; left:16px; right:16px; height:1px; background:rgba(255,255,255,.9);
+    }
+    .hero::before{ top:6px } .hero::after{ top:10px; opacity:.6 }
+    .hero .wrap{ position:relative; z-index:1 }
+
+    /* ===== 読書レイアウト ===== */
+    main{margin-top:8px}
+    .reading{
+      max-width:820px;margin:0 auto;
+      background:var(--card); border:1px solid var(--line); border-radius:16px;
+      padding:22px 22px; box-shadow:0 4px 12px rgba(0,0,0,.06);
+    }
+    .chapter-head{margin:0 0 10px; font-weight:700; color:#a24d7f; font-size:20px}
+    .prose p{margin:0 0 1.1rem; font-size:18px; color:var(--ink)}
+    .toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:16px 0 0}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 14px; border:1px solid var(--line); border-radius:999px;
+      background:#fff; cursor:pointer; font-weight:700;
+    }
+    .pill:hover{background:#fffefe}
+
+    footer{background:#ffe9e0;text-align:center;padding:20px;margin-top:32px;border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap bar">
+      <div class="brand">Cocona Fan Site</div>
+      <nav class="navbar">
+        <a href="index.html">Top</a>
+        <a href="about_cocona.html">About</a>
+        <a class="active" href="story.html">Story</a> <!-- 章ページでは Story をアクティブ -->
+        <a href="gallery.html">Gallery</a>
+        <a href="songs.html">Songs</a>
+        <a href="goods.html">Goods</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+
+  <!-- HERO（タイトルは常に「Story」） -->
+  <section class="hero">
+    <div class="wrap">
+      <h1 class="title">Story</h1>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <article class="reading">
+      <h2 class="chapter-head">第7章　― 卵の地図がつながるとき ―</h2>
+
+      <div class="prose">
+        <p>　ペルーでの失敗から数日、ココナは旅を続ける気力を失っていた。<br>
+          　市場で買ったパンとゆで卵をかじりながら、ぼんやり港を歩く。<br>
+          「このまま帰っちゃおうかな……」<br>
+          　そんな弱音が、ふっと口からこぼれたとき――。</p>
+
+        <p>「ココナ？」<br>
+          　振り返ると、パリで別れたリュカが立っていた。<br>
+          「なんでここに！？」<br>
+          「南米のレストランに修行しに来たんだ。で、噂を聞いた。港町で“卵娘”がしょげてるって」<br>
+          「卵娘って……！」</p>
+
+        <p>　リュカはココナの腕をぐいっと引っ張る。<br>
+          「行くぞ。君の料理を食べたい人たちがいる」<br>
+          　連れて行かれた先は、小さなコミュニティセンター。そこには見覚えのある顔があった。<br>
+          「マルセル！」<br>
+          「久しぶりだな、ココナ」<br>
+          　フランスからわざわざ訪ねてきたオーナーが、温かな笑みを向ける。</p>
+
+        <p>「お前の旅は、まだ途中だろ」<br>
+          「でも……私、失敗して……」<br>
+          「失敗なんて、料理を作るやつにはつきものだ。大事なのは、食べてもらいたいと思えるかどうかだ」</p>
+
+        <p>　マルセルが差し出したのは、各国で出会った卵料理のレシピが書かれた紙束だった。<br>
+          　そこには、スペインのトルティージャ、タイのカイジアオ、パリのオムレツ……見覚えのある名前が並んでいる。</p>
+
+        <p>「これ……全部、私が……」<br>
+          「そうだ。お前はもう、世界の卵料理の地図を持ってる」<br>
+          　その瞬間、ココナの胸に火が戻った。</p>
+
+        <p>「……よし、やる！　世界一の卵フェス！」<br>
+          　リュカがニヤリと笑う。<br>
+          「手伝うぞ。負けたくないしな」<br>
+          「ふふ、いい勝負にしよう！」</p>
+
+        <p>　こうしてココナは、故郷に帰って最後の舞台を開くことを決意した。<br>
+          　次に向かうのは、あの丘の上――出発点であり、ゴールでもある場所だ。</p>
+      </div>
+
+      <div class="toolbar">
+        <a class="pill" href="story.html">◀ 章一覧に戻る</a>
+        <a class="pill" href="ch6.html">◀ 前の章</a>
+        <a class="pill" href="final.html">次の章 ▶</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="wrap" style="text-align:center;padding:20px 0;border-top:1px solid var(--line);margin-top:8px">
+    <p>© 2025 ココナファンサイト</p>
+  </footer>
+
+  <script>
+    // ナビ反転（ヒーローは固定）
+    const THRESH = 40;
+    const onScroll = () => document.body.classList.toggle('scrolled', window.scrollY > THRESH);
+    addEventListener('scroll', onScroll, {passive:true});
+    addEventListener('load', onScroll);
+  </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ココナ ファンサイト | Cocona Belmette</title>
+  <style>
+    :root{
+      --bg:#fffaf5; --ink:#333; --accent:#cc6699; --accent-2:#ffd9e6; --chip:#ffe9e0; --line:#f3d8e4;
+    }
+    *{box-sizing:border-box}
+    body{font-family:"Hiragino Kaku Gothic ProN", system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans JP", sans-serif;margin:0;background:var(--bg);color:var(--ink)}
+    a{color:#a55;text-decoration:none}
+    header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg, var(--accent-2), #ffeae0 70%, transparent 100%);border-bottom:1px dashed var(--line);backdrop-filter:saturate(1.2) blur(6px)}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+    .topbar{display:flex;align-items:center;gap:12px;padding:14px 0}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo img{width:40px;height:40px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    .logo h1{font-size:18px;margin:0;color:#af4a7f}
+    nav{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+    nav a{padding:8px 12px;border-radius:999px;background:var(--chip);border:1px solid #ffd2cf;font-weight:700}
+    nav a:hover{transform:translateY(-1px)}
+    .hero{position:relative;overflow:hidden}
+    .hero-inner{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;padding:28px 0}
+    .hero h2{font-size:26px;margin:0;color:#b04a81}
+    .hero p{margin:.5rem 0 0}
+    .hero-visual{justify-self:center}
+    .hero-visual img{max-width:260px;border-radius:24px;box-shadow:0 8px 26px rgba(0,0,0,.12)}
+    .eggs{position:absolute;inset:auto -40px -60px -40px;pointer-events:none;opacity:.22;filter:blur(0.6px)}
+    .eggs::before,.eggs::after{content:"";position:absolute;border:2px dashed #f0d8e2;border-radius:50%}
+    .eggs::before{width:220px;height:300px;left:5%;bottom:-10px;transform:rotate(18deg)}
+    .eggs::after{width:280px;height:360px;right:8%;bottom:-30px;transform:rotate(-12deg)}
+    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+    .btn{display:inline-block;padding:12px 16px;border-radius:14px;font-weight:700}
+    .btn.primary{background:var(--accent);color:#fff}
+    .btn.ghost{background:#fff;border:2px solid var(--accent);color:var(--accent)}
+    .section{padding:28px 0}
+    .section h3{color:#b04a81;margin:0 0 12px 0}
+    .grid{display:grid;gap:16px}
+    .grid.cols-3{grid-template-columns:1fr}
+    .card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 4px 18px rgba(0,0,0,.06);padding:18px}
+    .badge{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--chip);border:1px solid #ffd2cf;font-weight:700;color:#a55}
+    .card footer{margin-top:10px}
+    @media(min-width:860px){
+      .hero-inner{grid-template-columns:380px 1fr}
+      .hero h2{font-size:32px}
+      .hero-visual img{max-width:320px}
+      .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    }
+    footer{background:#ffe9e0;text-align:center;padding:20px;margin-top:28px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <div class="logo">
+        <img src="cocona_main.png" alt="ココナ アイコン">
+        <h1>ココナ ファンサイト</h1>
+      </div>
+      <nav>
+        <a href="about_cocona.html">ココナについて</a>
+        <a href="gallery.html">ギャラリー</a>
+        <a href="gpts.html">ココナGPTs</a>
+        <a href="#goods">スタンプ＆グッズ</a>
+        <a href="#diary">ココナ日記</a>
+        <a href="#fanworks">ファンアート</a>
+        <a href="#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <div class="hero-visual">
+          <img src="cocona_main.png" alt="ココナ メインビジュアル">
+        </div>
+        <div>
+          <h2>✨ようこそ！ココナ・ベルメットの世界へ✨</h2>
+          <p>卵料理研究家で旅するグルメレポーター、ココナ・ベルメット。ふわっと優しい時間を、ここからお届けします。</p>
+          <div class="cta">
+            <a class="btn primary" href="about_cocona.html">ココナを知る</a>
+            <a class="btn ghost" href="gallery.html">最新ビジュアルを見る</a>
+          </div>
+        </div>
+      </div>
+      <div class="eggs" aria-hidden="true"></div>
+    </section>
+
+    <section class="section" id="news">
+      <div class="wrap">
+        <h3>📌 お知らせ</h3>
+        <div class="grid">
+          <div class="card">
+            <span class="badge">NEW</span>
+            <p style="margin:6px 0 0">LINEスタンプ第1弾 準備中！公開までは <strong>Coming Soon</strong> ページへ。</p>
+            <footer><a href="#goods">→ スタンプ＆グッズへ</a></footer>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h3>🧭 メニュー</h3>
+        <div class="grid cols-3">
+          <a class="card" href="about_cocona.html">
+            <h4 style="margin:0 0 6px">ココナについて</h4>
+            <p style="margin:0">プロフィール、設定、目標や夢をチェック。</p>
+          </a>
+          <a class="card" href="gallery.html">
+            <h4 style="margin:0 0 6px">ギャラリー</h4>
+            <p style="margin:0">絵本調ビジュアルや最新イラスト。</p>
+          </a>
+          <a class="card" href="gpts.html">
+            <h4 style="margin:0 0 6px">ココナGPTs</h4>
+            <p style="margin:0">ココナとおしゃべりできるGPTリンク集。</p>
+          </a>
+          <a class="card" href="#goods" id="goods">
+            <h4 style="margin:0 0 6px">スタンプ＆グッズ</h4>
+            <p style="margin:0">LINEスタンプやオリジナルグッズ（準備中）。</p>
+            <footer><span class="badge">Coming Soon</span></footer>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 ココナファンサイト</p>
+  </footer>
+</body>
+</html>

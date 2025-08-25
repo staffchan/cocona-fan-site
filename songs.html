@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Songs | Cocona Fan Site</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#fffaf7; --ink:#222; --muted:#6b6464; --line:#f1e6ed;
+    --accent:#f39ac6; --warm:#ffdfa8; --card:#fff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New",system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    line-height:1.9;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+
+  /* === 固定ナビ（白地×黒字） === */
+  .site-header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line)}
+  .site-header .bar{display:flex;align-items:center;gap:20px;padding:10px 16px}
+  .brand{font:700 20px/1 "Dancing Script",cursive;color:#af4a7f}
+  .navbar{margin-left:auto;display:flex;gap:28px}
+  .navbar a{
+    font:700 clamp(16px,1.8vw,20px) "Dancing+Script",cursive;
+    color:#222; position:relative; padding:8px 0; letter-spacing:.02em;
+  }
+  .navbar a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:transparent;transition:.2s}
+  .navbar a:hover::after,.navbar a.active::after{background:linear-gradient(90deg,var(--accent),var(--warm))}
+
+  /* === ヒーロー === */
+  .hero{
+    position:relative;display:grid;place-items:center;
+    padding:44px 0;min-height:clamp(200px,24vh,300px);
+    background:linear-gradient(90deg,#FFEAF6,#FFE1C2);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .hero .title{
+    margin:0;text-align:center;color:#fff;text-shadow:0 6px 24px rgba(0,0,0,.25);
+    font:700 clamp(46px,7.2vw,84px) "Dancing Script",cursive;line-height:1.05;letter-spacing:.5px;
+  }
+  .hero::before,.hero::after{content:"";position:absolute;left:16px;right:16px;height:1px;background:rgba(255,255,255,.9)}
+  .hero::before{top:6px}.hero::after{top:10px;opacity:.6}
+  .hero .wrap{position:relative;z-index:1}
+
+  main{margin-top:12px}
+
+  /* === 再生リスト === */
+  .panel{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px;box-shadow:0 4px 12px rgba(0,0,0,.06)
+  }
+  .list{display:flex;flex-direction:column;gap:10px}
+
+  .track{
+    width:100%;display:flex;flex-direction:column;gap:8px;
+    padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff;
+    cursor:pointer; text-align:left;
+    transition:background .2s ease,color .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .row{
+    display:flex;align-items:center;gap:14px;justify-content:space-between;
+  }
+  .left{display:flex;align-items:center;gap:12px;min-width:0}
+  .badge{
+    flex:0 0 auto;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:#fff;font-weight:700
+  }
+  .meta{min-width:0}
+  .title{font-weight:700}
+  .sub{color:var(--muted);font-size:.92rem}
+  .right{display:flex;align-items:center;gap:12px;color:var(--muted)}
+  .icon{font-weight:700}
+
+  /* ホバー＆再生中は反転 */
+  .track:hover,
+  .track.playing{
+    background:linear-gradient(90deg,var(--accent),var(--warm));
+    color:#fff; border-color:transparent;
+    box-shadow:0 6px 16px rgba(243,154,198,.22);
+  }
+  .track:hover .sub,
+  .track.playing .sub{color:#fff}
+  .track:hover .badge,
+  .track.playing .badge{background:rgba(255,255,255,.15); color:#fff; border-color:rgba(255,255,255,.4)}
+  .track:focus-visible{outline:3px solid rgba(243,154,198,.55); outline-offset:3px}
+
+  /* エラーメッセージ */
+  .msg{color:#a24d7f; font-size:.9rem}
+  .msg.hidden{display:none}
+
+  footer{background:#ffe9e0;text-align:center;padding:20px;margin-top:32px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+  <!-- 固定ナビ -->
+  <header class="site-header">
+    <div class="wrap bar">
+      <div class="brand">Cocona Fan Site</div>
+      <nav class="navbar">
+        <a href="index.html">Top</a>
+        <a href="about_cocona.html">About</a>
+        <a href="story.html">Story</a>
+        <a href="gallery.html">Gallery</a>
+        <a class="active" href="songs.html">Songs</a>
+        <a href="goods.html">Goods</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ヒーロー -->
+  <section class="hero">
+    <div class="wrap"><h1 class="title">Songs</h1></div>
+  </section>
+
+  <main class="wrap">
+    <section class="panel" aria-label="再生リスト">
+      <div class="list" id="list"></div>
+    </section>
+  </main>
+
+  <footer class="wrap" style="text-align:center;padding:20px 0;border-top:1px solid var(--line);margin-top:8px">
+    <p>© 2025 ココナファンサイト</p>
+  </footer>
+
+  <script>
+    /* ====== 曲データ（新しいファイル名に更新） ====== */
+    const BASE = 'media/songs/';  // songs.html からの相対パス
+    const TRACKS = [
+      { title:'最強モード',       note:'アップテンポBGM',  src: BASE + 'saikyou-mode.mp3' },
+      { title:'たまごかぞえうた', note:'ココナの数え歌',    src: BASE + 'egg kazoeuta.mp3' },
+      { title:'ココナステージ',   note:'小さなライブ用BGM', src: BASE + 'Cocona Stage.mp3' },
+    ];
+    
+    const $  = s => document.querySelector(s);
+    const $$ = s => [...document.querySelectorAll(s)];
+    const listEl = document.getElementById('list');
+    let currentAudio = null; // 再生中 audio
+    
+    function rowTemplate(i, t){
+      return `
+        <button class="track" data-i="${i}" aria-pressed="false">
+          <div class="row">
+            <div class="left">
+              <div class="badge">${i+1}</div>
+              <div class="meta">
+                <div class="title">${t.title}</div>
+                <div class="sub">${t.note || ''}</div>
+              </div>
+            </div>
+            <div class="right"><span class="icon" aria-hidden="true">▶︎</span></div>
+          </div>
+          <audio preload="metadata"></audio>
+          <div class="msg hidden" aria-live="polite"></div>
+        </button>
+      `;
+    }
+    
+    function build(){
+      listEl.innerHTML = TRACKS.map((t,i)=>rowTemplate(i,t)).join('');
+      $$('.track').forEach((row,i)=>{
+        row.addEventListener('click', ()=> toggle(i,row));
+        row.addEventListener('keydown', e=>{
+          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(i,row); }
+        });
+      });
+    }
+    
+    /* ---------- パス候補を総当たり（未エンコード / encodeURI / NFC / NFD） ---------- */
+    function candidatesFor(raw){
+      const nfc = raw.normalize('NFC');
+      const nfd = raw.normalize('NFD'); // mac の Finder 由来のファイルで起きがち
+      return [...new Set([
+        raw, nfc, nfd,
+        encodeURI(raw), encodeURI(nfc), encodeURI(nfd)
+      ])];
+    }
+    
+    /* 読み込んで再生できたら resolve */
+    function tryLoadAndPlay(audio, path){
+      return new Promise((resolve, reject)=>{
+        const onCan = ()=>{ cleanup(); audio.play().then(resolve).catch(reject); };
+        const onErr = ()=>{ cleanup(); reject(new Error('load-error')); };
+        const cleanup = ()=>{
+          audio.removeEventListener('canplay', onCan);
+          audio.removeEventListener('error', onErr);
+        };
+        audio.addEventListener('canplay', onCan, {once:true});
+        audio.addEventListener('error', onErr, {once:true});
+        audio.src = path;
+        audio.load();
+      });
+    }
+    
+    /* すべての候補を順に試す */
+    async function smartPlay(audio, rawPath){
+      audio.volume = 1; audio.muted = false;
+      let lastErr = null;
+      for(const p of candidatesFor(rawPath)){
+        try{
+          console.log('[try]', p);
+          await tryLoadAndPlay(audio, p);
+          console.log('[OK]', p);
+          return p;
+        }catch(e){
+          console.warn('[NG]', p, e?.message || e);
+          lastErr = e;
+        }
+      }
+      throw lastErr || new Error('play-failed');
+    }
+    
+    /* 行の UI を開始状態にする */
+    function setPlaying(row, on){
+      row.classList.toggle('playing', on);
+      row.setAttribute('aria-pressed', on ? 'true' : 'false');
+      row.querySelector('.icon').textContent = on ? '❚❚' : '▶︎';
+    }
+    
+    /* 再生停止（UIとAudio） */
+    function stopRow(row){
+      if(!row) return;
+      const audio = row.querySelector('audio');
+      audio.pause();
+      setPlaying(row, false);
+      if(currentAudio === audio) currentAudio = null;
+    }
+    
+    /* クリックでトグル */
+    async function toggle(i, row){
+      const audio = row.querySelector('audio');
+      const msg   = row.querySelector('.msg');
+      msg.classList.add('hidden'); msg.textContent = '';
+    
+      // 他の曲を止める
+      if(currentAudio && currentAudio !== audio){
+        stopRow(currentAudio.closest('.track'));
+      }
+    
+      if(audio.paused){
+        try{
+          const okSrc = await smartPlay(audio, TRACKS[i].src);
+          setPlaying(row, true);
+          currentAudio = audio;
+          // 失敗したとき用に「直接開く」リンクを準備
+          msg.dataset.oksrc = okSrc;
+        }catch(e){
+          setPlaying(row, false);
+          const raw = TRACKS[i].src;
+          const hint = `
+            音声を読み込めませんでした。<br>
+            ・songs.html からの相対パス：<code>${raw}</code><br>
+            ・拡張子は <code>.mp3</code><br>
+            ・ファイル/フォルダ名の大文字小文字・スペースを確認<br>
+            <a href="${encodeURI(raw)}" target="_blank" rel="noopener">→ 直接ファイルを開く</a>
+          `;
+          msg.innerHTML = hint;
+          msg.classList.remove('hidden');
+        }
+      }else{
+        stopRow(row);
+      }
+    
+      audio.onended = ()=> stopRow(row);
+    }
+    
+    build();
+    </script>
+</body>
+</html>

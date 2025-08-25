@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cocona Fan Site</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fffaf7; --ink:#222; --ink-sub:#6b6464;
+      --accent:#f39ac6; --warm:#ffdfa8; --line:#f5d7e6; --card:#fff;
+      --nav-size:clamp(16px,1.9vw,22px);
+      --block-h: 280px; /* セクションの高さ（お好みで 240〜360px） */
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      background: linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+      color:var(--ink);
+      font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      line-height:1.9;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+
+    /* ===== Header（サイト名とナビを同じ段） ===== */
+    header{position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--line)}
+    .head{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:10px 0}
+    .brand{font:700 22px "Dancing Script", cursive; color:#af4a7f}
+
+    .nav{display:flex; gap:34px; align-items:center}
+    .nav a{
+      color:var(--ink);
+      font-family:"Dancing Script", cursive;
+      font-weight:700; font-size:var(--nav-size); line-height:1.1;
+      padding:8px 2px; position:relative;
+    }
+    .nav a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s}
+    .nav a:hover::after{background:var(--accent)}
+    .nav a.active::after{background:var(--accent)}
+
+    /* ===== Hero ===== */
+    .hero{
+      position:relative; display:grid; place-items:center;
+      min-height:56vh;
+      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+      overflow:hidden;
+      background:#f7eae2;
+    }
+    .hero::before{
+      content:""; position:absolute; inset:0;
+      background-image:url('media/cocona-bg.PNG');
+      background-size:cover;
+      background-position:center 12%; /* ← 上寄り12% */
+      filter:brightness(.85);
+    }
+    .hero::after{
+      content:""; position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(255,232,243,.35), rgba(255,223,168,.28));
+    }
+    .hero .title{
+      position:relative; z-index:1;
+      margin:0; text-align:center; color:#fff; text-shadow:0 8px 28px rgba(0,0,0,.32);
+      font:700 clamp(46px,7.6vw,96px) "Dancing Script", cursive; line-height:1.05;
+      letter-spacing:.5px;
+    }
+
+    /* ===== News（横長1ブロック） ===== */
+    .news{
+      margin:22px 0 10px;
+      padding:16px 18px; border:1px solid var(--line); border-radius:16px; background:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,.06);
+    }
+    .news h2{margin:0 0 8px; font-size:1.12rem; color:#a24d7f; font-weight:700}
+    .news ul{margin:0; padding-left:1.2em}
+    .news li{margin:.28em 0}
+    .news a{color:#7f3b63; text-decoration:underline}
+    .news a:hover{opacity:.85}
+
+    /* ===== 交互レイアウトのセクション ===== */
+    .gap{height:14px} /* ← 各ブロックの間に“1行分”の空き */
+
+    .block{
+      display:grid;
+      grid-template-columns: 1fr 1fr;   /* ← 1:1 に統一 */
+      align-items:stretch; gap:0;
+      border:1px solid var(--line); border-radius:16px; overflow:hidden;
+      background:var(--card); box-shadow:0 4px 12px rgba(0,0,0,.06);
+      min-height:var(--block-h); isolation:isolate;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      position: relative;               /* ← 仕切り線のために追加 */
+    }
+    /* reverse も 1:1 のままでOK（順番はHTML側で入れ替えてある） */
+    .block.reverse{ grid-template-columns: 1fr 1fr }
+
+    /* 追加（中央の1pxライン） */
+    .block::before{
+      content:"";
+      position:absolute; top:0; bottom:0; left:50%;
+      width:1px; transform:translateX(-.5px);      /* 物理ピクセルに寄せてクッキリ */
+      background:var(--line);
+      z-index:2; pointer-events:none;
+    }
+    /* ホバー反転中でも見えるように少し明るめに */
+    .block-link:hover .block::before,
+    .block-link:focus-visible .block::before{
+      background:rgba(255,255,255,.65);
+    }
+
+    /* スマホで縦積み時は仕切り線を消す */
+    @media (max-width:860px){
+      .block::before{ display:none }
+    }
+
+    .thumb{
+      position:relative; overflow:hidden;
+      background:#000;
+    }
+    /* 画像はCSS変数で渡す： --bg: url('media/xxx.png'); --pos: center 15% */
+    .thumb::before{
+      content:""; position:absolute; inset:0;
+      background-image:var(--bg); background-size:cover;
+      background-position:var(--pos, center center);
+      transform:scale(1.02);
+    }
+    /* ホバー時のうっすら暗幕（反転のコントラスト強調） */
+    .block:hover .thumb::after{
+      content:""; position:absolute; inset:0; background:rgba(0,0,0,.12);
+    }
+
+    .body{
+      display:flex; flex-direction:column; justify-content:center; gap:6px;
+      padding:16px 18px;
+      background:#fff; position:relative;
+      transition: background .2s ease, color .2s ease;
+    }
+    .name{
+      font:700 24px/1.2 "Dancing Script", cursive; color:#a24d7f;
+    }
+    .desc{color:var(--ink-sub)}
+    .arrow{margin-top:4px; font-weight:700; color:#a24d7f}
+
+    /* ホバーで“反転”（背景＝アクセント〜ウォーム、文字＝白） */
+    .block-link:hover .block,
+    .block-link:focus-visible .block{
+      outline:none; transform:translateY(-2px);
+      box-shadow:0 10px 22px rgba(0,0,0,.12); border-color:transparent;
+    }
+    .block-link:hover .body,
+    .block-link:focus-visible .body{
+      background:linear-gradient(90deg,var(--accent),var(--warm));
+      color:#fff;
+    }
+    .block-link:hover .name,
+    .block-link:focus-visible .name{ color:#fff }
+    .block-link:hover .arrow,
+    .block-link:focus-visible .arrow{ color:#fff }
+    
+    /* レスポンシブ：縦積み */
+    @media (max-width:860px){
+      .block,.block.reverse{ grid-template-columns:1fr; }
+      .thumb{ height: 40vw; min-height:180px; }
+    }
+
+    /* ===== Contact ===== */
+    #contact{
+      margin:22px 0 28px; padding:18px; border:1px solid var(--line); border-radius:16px; background:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,.06);
+    }
+    #contact h2{margin:0 0 8px; font-size:1.12rem; color:#a24d7f; font-weight:700}
+    footer{background:#ffe9e0; text-align:center; padding:20px; border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="wrap head">
+      <div class="brand">Cocona Fan Site</div>
+      <nav class="nav" aria-label="Global">
+        <a class="active" href="index.html" aria-current="page">Top</a>
+        <a href="about_cocona.html">About</a>
+        <a href="story.html">Story</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="songs.html">Songs</a>
+        <a href="goods.html">Goods</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1 class="title">Welcome to Cocona’s World</h1>
+  </section>
+
+  <main class="wrap">
+    <!-- News（横長1ブロック） -->
+    <section id="news" class="news" aria-label="News">
+      <h2>News</h2>
+      <ul>
+        <li><a href="#">【お知らせ】サイトのトップをリニューアルしました。</a></li>
+        <li><a href="#">【新作】ギャラリーにイラストを数点追加しました。</a></li>
+        <li><a href="#">【公開】Cocona’s Egg Chat（英語）をリリース！</a></li>
+      </ul>
+    </section>
+
+    <div class="gap"></div>
+
+    <!-- About（画像左） -->
+    <a class="block-link" href="about_cocona.html">
+      <section class="block" aria-label="About Cocona">
+        <div class="thumb" style="--bg: url('media/feature-about.PNG'); --pos: center 2%;"></div>
+        <div class="body">
+          <div class="name">About</div>
+          <div class="desc">ココナ・ベルメットのプロフィールと世界観。</div>
+        </div>
+      </section>
+    </a>
+
+    <div class="gap"></div>
+
+    <!-- Story（画像右） -->
+    <a class="block-link" href="story.html">
+      <section class="block reverse" aria-label="Story">
+        <div class="body">
+          <div class="name">Story</div>
+          <div class="desc">序章〜最終章まで、旅の物語を読む。</div>
+        </div>
+        <div class="thumb" style="--bg: url('media/feature-story.PNG'); --pos: center 15%;"></div>
+      </section>
+    </a>
+
+    <div class="gap"></div>
+
+    <!-- Gallery（画像左） -->
+    <a class="block-link" href="gallery.html">
+      <section class="block" aria-label="Gallery">
+        <div class="thumb" style="--bg: url('media/feature-gallery.PNG'); --pos: center 15%;"></div>
+        <div class="body">
+          <div class="name">Gallery</div>
+          <div class="desc">旅のひとこまをあつめたビジュアル集。</div>
+        </div>
+      </section>
+    </a>
+
+    <div class="gap"></div>
+
+    <!-- Songs（画像右） -->
+    <a class="block-link" href="songs.html">
+      <section class="block reverse" aria-label="Songs">
+        <div class="body">
+          <div class="name">Songs</div>
+          <div class="desc">作業のお供に、ココナの小さな音楽。</div>
+        </div>
+        <div class="thumb" style="--bg: url('media/feature-songs.PNG'); --pos: center 15%;"></div>
+      </section>
+    </a>
+
+    <div class="gap"></div>
+
+    <!-- Cocona GPTs / Goods（画像左） -->
+    <a class="block-link" href="goods.html">
+      <section class="block" aria-label="Goods">
+        <div class="thumb" style="--bg: url('media/feature-goods.PNG'); --pos: center 25%;"></div>
+        <div class="body">
+          <div class="name">Goods</div>
+          <div class="desc">ココナのGPTsとLINEスタンプはこちら。</div>
+        </div>
+      </section>
+    </a>
+
+    <div class="gap"></div>
+
+    <!-- Contact（画像右／任意のカバー。無ければ下の行を消してOK） -->
+    <a class="block-link" href="#contact">
+      <section class="block reverse" aria-label="Contact">
+        <div class="body">
+          <div class="name">Contact</div>
+          <div class="desc">サイトの感想やご連絡はこちらから。</div>
+        </div>
+        <div class="thumb" style="--bg: url('media/feature-contact.PNG'); --pos: center 25%;"></div>
+      </section>
+    </a>
+
+    <!-- お問い合わせ -->
+    <section id="contact" aria-label="Contact">
+      <h2>Contact</h2>
+      <p>ご感想やお問い合せは <a href="mailto:hello@example.com">hello@example.com</a> まで。</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>© 2025 ココナファンサイト</p>
+    </div>
+  </footer>
+</body>
+</html>
