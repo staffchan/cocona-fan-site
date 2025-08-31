@@ -1,300 +1,340 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cocona Fan Site</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cocona Fan Site</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bg:#fffaf7; --ink:#222; --ink-sub:#6b6464;
-      --accent:#f39ac6; --warm:#ffdfa8; --line:#f5d7e6; --card:#fff;
-      --nav-size:clamp(16px,1.9vw,22px);
-      --block-h: 280px; /* セクションの高さ（お好みで 240〜360px） */
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0}
-    body{
-      background: linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
-      color:var(--ink);
-      font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-      line-height:1.9;
-    }
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+<style>
+:root{
+  --bg:#fffaf7; --ink:#222; --ink-sub:#6b6464;
+  --accent:#f39ac6; --warm:#ffdfa8; --line:#f5d7e6; --card:#fff;
+  --nav-size:clamp(16px,1.9vw,22px);
+  --block-h: 280px;                 /* セクション高さ（お好みで調整） */
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background: linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+  color:var(--ink);
+  font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  line-height:1.9;
+}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
 
-    /* ===== Header（サイト名とナビを同じ段） ===== */
-    header{position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--line)}
-    .head{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:10px 0}
-    .brand{font:700 22px "Dancing Script", cursive; color:#af4a7f}
+/* ===== Header（PC: 横並び / SP: ハンバーガー） ===== */
+header{position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--line)}
+.head{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:10px 0}
+.brand{font:700 22px "Dancing Script", cursive; color:#af4a7f}
 
-    .nav{display:flex; gap:34px; align-items:center}
-    .nav a{
-      color:var(--ink);
-      font-family:"Dancing Script", cursive;
-      font-weight:700; font-size:var(--nav-size); line-height:1.1;
-      padding:8px 2px; position:relative;
-    }
-    .nav a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s}
-    .nav a:hover::after{background:var(--accent)}
-    .nav a.active::after{background:var(--accent)}
+.nav{display:flex; gap:34px; align-items:center}
+.nav a{
+  color:var(--ink);
+  font-family:"Dancing Script", cursive;
+  font-weight:700; font-size:var(--nav-size); line-height:1.1;
+  padding:8px 2px; position:relative;
+}
+.nav a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s}
+.nav a:hover::after{background:var(--accent)}
+.nav a.active::after{background:var(--accent)}
 
-    /* ===== Hero ===== */
-    .hero{
-      position:relative; display:grid; place-items:center;
-      min-height:56vh;
-      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
-      overflow:hidden;
-      background:#f7eae2;
-    }
-    .hero::before{
-      content:""; position:absolute; inset:0;
-      background-image:url('media/cocona-bg.PNG');
-      background-size:cover;
-      background-position:center 12%; /* ← 上寄り12% */
-      filter:brightness(.85);
-    }
-    .hero::after{
-      content:""; position:absolute; inset:0;
-      background:linear-gradient(180deg, rgba(255,232,243,.35), rgba(255,223,168,.28));
-    }
-    .hero .title{
-      position:relative; z-index:1;
-      margin:0; text-align:center; color:#fff; text-shadow:0 8px 28px rgba(0,0,0,.32);
-      font:700 clamp(46px,7.6vw,96px) "Dancing Script", cursive; line-height:1.05;
-      letter-spacing:.5px;
-    }
+/* Hamburger button (SP only) */
+.menu-btn{display:none; width:42px; height:42px; border-radius:10px; border:1px solid var(--line); background:#fff; place-items:center; cursor:pointer}
+.menu-btn span{display:block; width:22px; height:2px; background:#a24d7f; position:relative}
+.menu-btn span::before,.menu-btn span::after{content:""; position:absolute; left:0; width:22px; height:2px; background:#a24d7f}
+.menu-btn span::before{top:-6px}.menu-btn span::after{top:6px}
 
-    /* ===== News（横長1ブロック） ===== */
-    .news{
-      margin:22px 0 10px;
-      padding:16px 18px; border:1px solid var(--line); border-radius:16px; background:#fff;
-      box-shadow:0 4px 12px rgba(0,0,0,.06);
-    }
-    .news h2{margin:0 0 8px; font-size:1.12rem; color:#a24d7f; font-weight:700}
-    .news ul{margin:0; padding-left:1.2em}
-    .news li{margin:.28em 0}
-    .news a{color:#7f3b63; text-decoration:underline}
-    .news a:hover{opacity:.85}
+/* Drawer (SP) */
+.drawer{position:fixed; inset:0; display:none; z-index:70}
+.drawer.show{display:block}
+.drawer .backdrop{position:absolute; inset:0; background:rgba(0,0,0,.35)}
+.drawer .panel{
+  position:absolute; top:0; right:0; width:min(88vw,320px); height:100%;
+  background:#fff; border-left:1px solid var(--line); box-shadow:-8px 0 24px rgba(0,0,0,.12);
+  display:flex; flex-direction:column; gap:10px; padding:16px;
+}
+.drawer .title{font:700 22px "Dancing Script", cursive; color:#af4a7f; margin:2px 0 8px}
+.drawer a{
+  display:block; padding:12px 10px; border:1px solid var(--line); border-radius:12px; background:#fff;
+  /* ← サイトと同じフォントに統一 */
+  font-family:"Dancing Script", cursive; font-weight:700; font-size:20px; color:#222;
+}
+.drawer a:hover{background:linear-gradient(90deg,var(--accent),var(--warm)); color:#fff; border-color:transparent}
 
-    /* ===== 交互レイアウトのセクション ===== */
-    .gap{height:14px} /* ← 各ブロックの間に“1行分”の空き */
+/* SP: show hamburger & hide inline nav */
+@media (max-width:860px){
+  .nav{display:none}
+  .menu-btn{display:grid}
+}
 
-    .block{
-      display:grid;
-      grid-template-columns: 1fr 1fr;   /* ← 1:1 に統一 */
-      align-items:stretch; gap:0;
-      border:1px solid var(--line); border-radius:16px; overflow:hidden;
-      background:var(--card); box-shadow:0 4px 12px rgba(0,0,0,.06);
-      min-height:var(--block-h); isolation:isolate;
-      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-      position: relative;               /* ← 仕切り線のために追加 */
-    }
-    /* reverse も 1:1 のままでOK（順番はHTML側で入れ替えてある） */
-    .block.reverse{ grid-template-columns: 1fr 1fr }
+/* ===== Hero ===== */
+.hero{
+  position:relative; display:grid; place-items:center;
+  min-height:56vh;
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  overflow:hidden; background:#f7eae2;
+}
+.hero::before{
+  content:""; position:absolute; inset:0;
+  background-image:url('media/cocona-bg.PNG');
+  background-size:cover;
+  background-position:center 12%;               /* ← 上寄り12% */
+  filter:brightness(.85);
+}
+.hero::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(255,232,243,.35), rgba(255,223,168,.28));
+}
+.hero .title{
+  position:relative; z-index:1;
+  margin:0; text-align:center; color:#fff; text-shadow:0 8px 28px rgba(0,0,0,.32);
+  font:700 clamp(46px,7.6vw,96px) "Dancing Script", cursive; line-height:1.05;
+  letter-spacing:.5px;
+}
 
-    /* 追加（中央の1pxライン） */
-    .block::before{
-      content:"";
-      position:absolute; top:0; bottom:0; left:50%;
-      width:1px; transform:translateX(-.5px);      /* 物理ピクセルに寄せてクッキリ */
-      background:var(--line);
-      z-index:2; pointer-events:none;
-    }
-    /* ホバー反転中でも見えるように少し明るめに */
-    .block-link:hover .block::before,
-    .block-link:focus-visible .block::before{
-      background:rgba(255,255,255,.65);
-    }
+/* ===== News（横長1ブロック） ===== */
+.news{
+  margin:22px 0 10px;
+  padding:16px 18px; border:1px solid var(--line); border-radius:16px; background:#fff;
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
+.news h2{margin:0 0 8px; font-size:1.12rem; color:#a24d7f; font-weight:700}
+.news ul{margin:0; padding-left:1.2em}
+.news li{margin:.28em 0}
+.news a{color:#7f3b63; text-decoration:underline}
+.news a:hover{opacity:.85}
 
-    /* スマホで縦積み時は仕切り線を消す */
-    @media (max-width:860px){
-      .block::before{ display:none }
-    }
+/* ===== 交互レイアウト（PCは中央ピッタリ 1fr 1fr） ===== */
+.gap{height:14px}
 
-    .thumb{
-      position:relative; overflow:hidden;
-      background:#000;
-    }
-    /* 画像はCSS変数で渡す： --bg: url('media/xxx.png'); --pos: center 15% */
-    .thumb::before{
-      content:""; position:absolute; inset:0;
-      background-image:var(--bg); background-size:cover;
-      background-position:var(--pos, center center);
-      transform:scale(1.02);
-    }
-    /* ホバー時のうっすら暗幕（反転のコントラスト強調） */
-    .block:hover .thumb::after{
-      content:""; position:absolute; inset:0; background:rgba(0,0,0,.12);
-    }
+.block-link{display:block}
+.block{
+  display:grid; grid-template-columns: 1fr 1fr; align-items:stretch; gap:0;   /* ← 50/50 きっちり */
+  border:1px solid var(--line); border-radius:16px; overflow:hidden;
+  background:var(--card); box-shadow:0 4px 12px rgba(0,0,0,.06);
+  min-height:var(--block-h); position:relative; isolation:isolate;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+/* 中央ライン（PCのみ見せる） */
+.block::before{
+  content:""; position:absolute; top:0; bottom:0; left:50%;
+  width:1px; transform:translateX(-.5px); background:var(--line);
+  z-index:2; pointer-events:none;
+}
 
-    .body{
-      display:flex; flex-direction:column; justify-content:center; gap:6px;
-      padding:16px 18px;
-      background:#fff; position:relative;
-      transition: background .2s ease, color .2s ease;
-    }
-    .name{
-      font:700 24px/1.2 "Dancing Script", cursive; color:#a24d7f;
-    }
-    .desc{color:var(--ink-sub)}
-    .arrow{margin-top:4px; font-weight:700; color:#a24d7f}
+/* 右画像パターン */
+.block.reverse{ grid-template-columns: 1fr 1fr }
 
-    /* ホバーで“反転”（背景＝アクセント〜ウォーム、文字＝白） */
-    .block-link:hover .block,
-    .block-link:focus-visible .block{
-      outline:none; transform:translateY(-2px);
-      box-shadow:0 10px 22px rgba(0,0,0,.12); border-color:transparent;
-    }
-    .block-link:hover .body,
-    .block-link:focus-visible .body{
-      background:linear-gradient(90deg,var(--accent),var(--warm));
-      color:#fff;
-    }
-    .block-link:hover .name,
-    .block-link:focus-visible .name{ color:#fff }
-    .block-link:hover .arrow,
-    .block-link:focus-visible .arrow{ color:#fff }
-    
-    /* レスポンシブ：縦積み */
-    @media (max-width:860px){
-      .block,.block.reverse{ grid-template-columns:1fr; }
-      .thumb{ height: 40vw; min-height:180px; }
-    }
+.thumb{ position:relative; overflow:hidden; background:#000 }
+.thumb::before{
+  content:""; position:absolute; inset:0;
+  background-image:var(--bg); background-size:cover;
+  background-position:var(--pos, center center);
+  transform:scale(1.02);
+}
+.block:hover .thumb::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.12) }
 
-    /* ===== Contact ===== */
-    #contact{
-      margin:22px 0 28px; padding:18px; border:1px solid var(--line); border-radius:16px; background:#fff;
-      box-shadow:0 4px 12px rgba(0,0,0,.06);
-    }
-    #contact h2{margin:0 0 8px; font-size:1.12rem; color:#a24d7f; font-weight:700}
-    footer{background:#ffe9e0; text-align:center; padding:20px; border-top:1px solid var(--line)}
-  </style>
+.body{
+  display:flex; flex-direction:column; justify-content:center; gap:6px;
+  padding:16px 18px; background:#fff; position:relative; z-index:1;
+  transition: background .2s ease, color .2s ease;
+}
+.name{ font:700 24px/1.2 "Dancing Script", cursive; color:#a24d7f }
+.desc{ color:var(--ink-sub) }
+.arrow{ margin-top:4px; font-weight:700; color:#a24d7f }
+
+/* ホバーで反転 */
+.block-link:hover .block,
+.block-link:focus-visible .block{
+  outline:none; transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(0,0,0,.12); border-color:transparent;
+}
+.block-link:hover .body,
+.block-link:focus-visible .body{
+  background:linear-gradient(90deg,var(--accent),var(--warm)); color:#fff;
+}
+.block-link:hover .name,
+.block-link:focus-visible .name{ color:#fff }
+.block-link:hover .arrow,
+.block-link:focus-visible .arrow{ color:#fff }
+
+/* ===== SP：すべて〈画像→テキスト〉で統一 ===== */
+@media (max-width:860px){
+  .block,.block.reverse{
+    grid-template-columns:1fr;
+  }
+  .block::before{ display:none }                 /* 中央ラインは非表示 */
+  .thumb{ height: 44vw; min-height:180px; }      /* 画像先頭 */
+  .block.reverse .thumb{ order:-1 }              /* 逆順だったカードも画像を先頭に */
+}
+
+/* ===== Contact ===== */
+#contact{
+  margin:22px 0 28px; padding:18px; border:1px solid var(--line); border-radius:16px; background:#fff;
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
+#contact h2{margin:0 0 8px; font-size:1.12rem; color:#a24d7f; font-weight:700}
+
+footer{background:#ffe9e0; text-align:center; padding:20px; border-top:1px solid var(--line)}
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="wrap head">
-      <div class="brand">Cocona Fan Site</div>
-      <nav class="nav" aria-label="Global">
-        <a class="active" href="index.html" aria-current="page">Top</a>
-        <a href="about_cocona.html">About</a>
-        <a href="story.html">Story</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="songs.html">Songs</a>
-        <a href="goods.html">Goods</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-  </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <h1 class="title">Welcome to Cocona’s World</h1>
+<!-- Header -->
+<header>
+  <div class="wrap head">
+    <div class="brand">Cocona Fan Site</div>
+
+    <!-- PC nav -->
+    <nav class="nav" aria-label="Global">
+      <a class="active" href="index.html" aria-current="page">Top</a>
+      <a href="about_cocona.html">About</a>
+      <a href="story.html">Story</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="songs.html">Songs</a>
+      <a href="goods.html">Goods</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- SP hamburger -->
+    <button class="menu-btn" id="menuBtn" aria-label="メニューを開く"><span></span></button>
+  </div>
+</header>
+
+<!-- Drawer (SP) -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="backdrop" id="backdrop"></div>
+  <div class="panel">
+    <div class="title">Menu</div>
+    <a href="index.html">Top</a>
+    <a href="about_cocona.html">About</a>
+    <a href="story.html">Story</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="songs.html">Songs</a>
+    <a href="goods.html">Goods</a>
+    <a href="mailto:hello@example.com?subject=%5BCocona%20Fan%20Site%5D%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%81%9B">
+      Contact
+    </a>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <h1 class="title">Welcome to Cocona’s World</h1>
+</section>
+
+<main class="wrap">
+
+  <!-- News -->
+  <section id="news" class="news" aria-label="News">
+    <h2>News</h2>
+    <ul>
+      <li><a href="#">【お知らせ】サイトのトップをリニューアルしました。</a></li>
+      <li><a href="#">【新作】ギャラリーにイラストを数点追加しました。</a></li>
+      <li><a href="#">【公開】Cocona’s Egg Chat（英語）をリリース！</a></li>
+    </ul>
   </section>
 
-  <main class="wrap">
-    <!-- News（横長1ブロック） -->
-    <section id="news" class="news" aria-label="News">
-      <h2>News</h2>
-      <ul>
-        <li><a href="#">【お知らせ】サイトのトップをリニューアルしました。</a></li>
-        <li><a href="#">【新作】ギャラリーにイラストを数点追加しました。</a></li>
-        <li><a href="#">【公開】Cocona’s Egg Chat（英語）をリリース！</a></li>
-      </ul>
+  <div class="gap"></div>
+
+  <!-- About（画像左） -->
+  <a class="block-link" href="about_cocona.html">
+    <section class="block" aria-label="About Cocona">
+      <div class="thumb" style="--bg: url('media/feature-about.PNG'); --pos: center 2%;"></div>
+      <div class="body">
+        <div class="name">About</div>
+        <div class="desc">ココナ・ベルメットのプロフィールと世界観。</div>
+      </div>
     </section>
+  </a>
 
-    <div class="gap"></div>
+  <div class="gap"></div>
 
-    <!-- About（画像左） -->
-    <a class="block-link" href="about_cocona.html">
-      <section class="block" aria-label="About Cocona">
-        <div class="thumb" style="--bg: url('media/feature-about.PNG'); --pos: center 2%;"></div>
-        <div class="body">
-          <div class="name">About</div>
-          <div class="desc">ココナ・ベルメットのプロフィールと世界観。</div>
-        </div>
-      </section>
-    </a>
-
-    <div class="gap"></div>
-
-    <!-- Story（画像右） -->
-    <a class="block-link" href="story.html">
-      <section class="block reverse" aria-label="Story">
-        <div class="body">
-          <div class="name">Story</div>
-          <div class="desc">序章〜最終章まで、旅の物語を読む。</div>
-        </div>
-        <div class="thumb" style="--bg: url('media/feature-story.PNG'); --pos: center 15%;"></div>
-      </section>
-    </a>
-
-    <div class="gap"></div>
-
-    <!-- Gallery（画像左） -->
-    <a class="block-link" href="gallery.html">
-      <section class="block" aria-label="Gallery">
-        <div class="thumb" style="--bg: url('media/feature-gallery.PNG'); --pos: center 15%;"></div>
-        <div class="body">
-          <div class="name">Gallery</div>
-          <div class="desc">旅のひとこまをあつめたビジュアル集。</div>
-        </div>
-      </section>
-    </a>
-
-    <div class="gap"></div>
-
-    <!-- Songs（画像右） -->
-    <a class="block-link" href="songs.html">
-      <section class="block reverse" aria-label="Songs">
-        <div class="body">
-          <div class="name">Songs</div>
-          <div class="desc">作業のお供に、ココナの小さな音楽。</div>
-        </div>
-        <div class="thumb" style="--bg: url('media/feature-songs.PNG'); --pos: center 15%;"></div>
-      </section>
-    </a>
-
-    <div class="gap"></div>
-
-    <!-- Cocona GPTs / Goods（画像左） -->
-    <a class="block-link" href="goods.html">
-      <section class="block" aria-label="Goods">
-        <div class="thumb" style="--bg: url('media/feature-goods.PNG'); --pos: center 25%;"></div>
-        <div class="body">
-          <div class="name">Goods</div>
-          <div class="desc">ココナのGPTsとLINEスタンプはこちら。</div>
-        </div>
-      </section>
-    </a>
-
-    <div class="gap"></div>
-
-    <!-- Contact（画像右／任意のカバー。無ければ下の行を消してOK） -->
-    <a class="block-link" href="#contact">
-      <section class="block reverse" aria-label="Contact">
-        <div class="body">
-          <div class="name">Contact</div>
-          <div class="desc">サイトの感想やご連絡はこちらから。</div>
-        </div>
-        <div class="thumb" style="--bg: url('media/feature-contact.PNG'); --pos: center 25%;"></div>
-      </section>
-    </a>
-
-    <!-- お問い合わせ -->
-    <section id="contact" aria-label="Contact">
-      <h2>Contact</h2>
-      <p>ご感想やお問い合せは <a href="mailto:hello@example.com">hello@example.com</a> まで。</p>
+  <!-- Story（画像右） -->
+  <a class="block-link" href="story.html">
+    <section class="block reverse" aria-label="Story">
+      <div class="body">
+        <div class="name">Story</div>
+        <div class="desc">序章〜最終章まで、旅の物語を読む。</div>
+      </div>
+      <div class="thumb" style="--bg: url('media/feature-story.PNG'); --pos: center 15%;"></div>
     </section>
-  </main>
+  </a>
 
-  <footer>
-    <div class="wrap">
-      <p>© 2025 ココナファンサイト</p>
-    </div>
-  </footer>
+  <div class="gap"></div>
+
+  <!-- Gallery（画像左） -->
+  <a class="block-link" href="gallery.html">
+    <section class="block" aria-label="Gallery">
+      <div class="thumb" style="--bg: url('media/feature-gallery.PNG'); --pos: center 15%;"></div>
+      <div class="body">
+        <div class="name">Gallery</div>
+        <div class="desc">旅のひとこまをあつめたビジュアル集。</div>
+      </div>
+    </section>
+  </a>
+
+  <div class="gap"></div>
+
+  <!-- Songs（画像右） -->
+  <a class="block-link" href="songs.html">
+    <section class="block reverse" aria-label="Songs">
+      <div class="body">
+        <div class="name">Songs</div>
+        <div class="desc">作業のお供に、ココナの小さな音楽。</div>
+      </div>
+      <div class="thumb" style="--bg: url('media/feature-songs.PNG'); --pos: center 15%;"></div>
+    </section>
+  </a>
+
+  <div class="gap"></div>
+
+  <!-- Goods（画像左） -->
+  <a class="block-link" href="goods.html">
+    <section class="block" aria-label="Goods">
+      <div class="thumb" style="--bg: url('media/feature-goods.PNG'); --pos: center 25%;"></div>
+      <div class="body">
+        <div class="name">Goods</div>
+        <div class="desc">ココナのGPTsとLINEスタンプはこちら。</div>
+      </div>
+    </section>
+  </a>
+
+  <div class="gap"></div>
+
+  <!-- Contact（画像＋文字カード／クリックでメール作成を起動） -->
+  <a class="block-link"
+    href="mailto:hello@example.com?subject=%5BCocona%20Fan%20Site%5D%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%81%9B&body=%E3%81%93%E3%81%93%E3%81%AB%E3%81%94%E8%A6%81%E4%BB%B6%E3%82%92%E3%81%94%E8%A8%98%E5%85%A5%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82%0A%0A%E3%81%8A%E5%90%8D%E5%89%8D%EF%BC%9A%0A%E5%86%85%E5%AE%B9%EF%BC%9A"
+    aria-label="Contact（メール作成を開きます）">
+    <section class="block reverse" aria-label="Contact">
+      <div class="body">
+        <div class="name">Contact</div>
+        <div class="desc">サイトの感想やご連絡はこちらから。</div>
+      </div>
+      <div class="thumb" style="--bg: url('media/feature-contact.PNG'); --pos: center 25%;"></div>
+    </section>
+  </a>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2025 ココナファンサイト</p>
+  </div>
+</footer>
+
+<script>
+/* Drawer open/close */
+const menuBtn = document.getElementById('menuBtn');
+const drawer  = document.getElementById('drawer');
+const backdrop= document.getElementById('backdrop');
+const toggleDrawer = (show)=> drawer.classList.toggle('show', show);
+
+menuBtn.addEventListener('click', ()=> toggleDrawer(true));
+backdrop.addEventListener('click', ()=> toggleDrawer(false));
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleDrawer(false) });
+</script>
 </body>
 </html>

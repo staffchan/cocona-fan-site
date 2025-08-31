@@ -5,20 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Chapter 5 | Story | Cocona Fan Site</title>
 
-  <!-- 見出し/ナビ: Dancing Script、本文: Zen Kaku -->
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <!-- 見出し: Dancing Script / 本文: Zen Kaku -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --bg:#fffaf7; --ink:#222; --ink-sub:#6b6464;
       --accent:#f39ac6; --warm:#ffdfa8; --line:#f5d7e6; --card:#fff;
-      --nav-size:clamp(16px,1.9vw,22px); /* ナビの統一サイズ */
+      --nav-size:clamp(16px,1.9vw,22px);
     }
-    *{box-sizing:border-box}
-    html,body{margin:0}
-    html{scroll-behavior:smooth}
+    *{box-sizing:border-box} html,body{margin:0}
     body{
-      background: linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+      background:linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
       color:var(--ink);
       font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
       line-height:1.9;
@@ -26,142 +24,246 @@
     a{color:inherit;text-decoration:none}
     .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
 
-    /* ===== 共通ナビ（白地×黒字） ===== */
-    .site-header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line, #f1e6ed);}
-    .site-header .bar{display:flex; align-items:center; gap:20px; padding:10px 16px;}
-    .site-header .brand{font:700 20px/1 "Dancing Script",cursive; color:#af4a7f;}
-    .navbar{margin-left:auto; display:flex; gap:28px;}
-    .navbar a{
-      font:700 clamp(16px,1.8vw,20px) "Dancing Script",cursive;
-      color:#222; position:relative; padding:8px 0; letter-spacing:.02em;
+    /* ===== Header（PC: 横並び / SP: 3点メニュー） ===== */
+    header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line)}
+    .head{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:10px 0}
+    .brand{font:700 22px "Dancing Script", cursive; color:#af4a7f}
+
+    .nav{display:flex; gap:34px; align-items:center}
+    .nav a{
+      color:var(--ink); font-family:"Dancing Script", cursive;
+      font-weight:700; font-size:var(--nav-size); line-height:1.1;
+      padding:8px 2px; position:relative;
     }
-    .navbar a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s;}
-    .navbar a:hover::after, .navbar a.active::after{
-      background:linear-gradient(90deg, var(--accent,#f39ac6), var(--warm,#ffdfa8));
+    .nav a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s}
+    .nav a:hover::after, .nav a.active::after{ background:var(--accent) }
+
+    /* スマホの横3点メニュー用 */
+    .menu-btn .dots{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;                 /* 点の間隔 */
+      transform:translateY(-1px);
+    }
+    .menu-btn .dots b{
+      display:block;
+      width:3px; height:3px;   /* 点の大きさ */
+      border-radius:50%;
+      background:#a24d7f;      /* 既存テーマ色 */
+    }
+    /* スマホ横3点メニューのボタン本体（PCでは非表示） */
+    .menu-btn{
+      display:none;
+      width:40px; height:40px; border-radius:999px;
+      border:1px solid var(--line); background:#fff; cursor:pointer;
+      align-items:center; justify-content:center;
     }
 
-    /* ===== ヒーロー（ギャラリーと同テイスト） ===== */
+    /* 前/次ボタンの“無効化”表示（クリック不可） */
+    .btn[aria-disabled="true"]{
+      opacity:.45; pointer-events:none; filter:grayscale(.2);
+    }
+
+    .drawer{position:fixed; inset:0; display:none; z-index:70}
+    .drawer.show{display:block}
+    .drawer .back{position:absolute; inset:0; background:rgba(0,0,0,.35)}
+    .drawer .panel{
+      position:absolute; top:0; right:0; width:min(78vw, 320px); height:100%;
+      background:#fff; border-left:1px solid var(--line); box-shadow:-8px 0 24px rgba(0,0,0,.18);
+      display:flex; flex-direction:column; padding:14px;
+    }
+    .drawer .close{align-self:flex-end; border:1px solid var(--line); background:#fff; border-radius:999px; width:36px; height:36px; cursor:pointer}
+    .drawer .logo{margin:6px 0 10px; font:700 22px "Dancing Script", cursive; color:#af4a7f; text-align:left}
+    .drawer nav a{
+      display:block; padding:12px 6px; border-bottom:1px solid #f3e6ee;
+      font:700 22px/1.2 "Dancing Script", cursive; color:#333;
+    }
+    .drawer nav a:hover{ background:linear-gradient(90deg, #ffe8f3, #ffefd9) }
+
+    @media (max-width:860px){ .nav{display:none} .menu-btn{display:inline-flex} }
+
+    /* ===== Hero ===== */
     .hero{
       position:relative; display:grid; place-items:center;
       padding:44px 0; min-height:clamp(200px,24vh,300px);
       background:linear-gradient(90deg,#FFEAF6,#FFE1C2);
-      border-top:1px solid var(--line,#f1e6ed); border-bottom:1px solid var(--line,#f1e6ed);
+      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
     }
     .hero .title{
-      margin:0; text-align:center; color:#fff;
-      text-shadow:0 6px 24px rgba(0,0,0,.25);
-      font:700 clamp(46px,7.2vw,84px) "Dancing Script",cursive; line-height:1.05; letter-spacing:.5px;
+      margin:0; text-align:center; color:#fff; text-shadow:0 6px 24px rgba(0,0,0,.25);
+      font:700 clamp(46px,7.2vw,84px) "Dancing Script", cursive; line-height:1.05; letter-spacing:.5px;
     }
-    .hero::before,.hero::after{
-      content:""; position:absolute; left:16px; right:16px; height:1px; background:rgba(255,255,255,.9);
-    }
-    .hero::before{ top:6px } .hero::after{ top:10px; opacity:.6 }
-    .hero .wrap{ position:relative; z-index:1 }
+    .hero::before,.hero::after{content:"";position:absolute;left:16px;right:16px;height:1px;background:rgba(255,255,255,.9)}
+    .hero::before{top:6px} .hero::after{top:10px;opacity:.6}
 
-    /* ===== 読書レイアウト ===== */
-    main{margin-top:8px}
-    .reading{
-      max-width:820px;margin:0 auto;
-      background:var(--card); border:1px solid var(--line); border-radius:16px;
-      padding:22px 22px; box-shadow:0 4px 12px rgba(0,0,0,.06);
+    /* ===== Controls（章一覧／次へ） ===== */
+    .controls{
+      display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;
+      margin:14px 0 8px;
     }
-    .chapter-head{margin:0 0 10px; font-weight:700; color:#a24d7f; font-size:20px}
-    .prose p{margin:0 0 1.1rem; font-size:18px; color:var(--ink)}
-    .toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:16px 0 0}
-    .pill{
+    .btn{
       display:inline-flex; align-items:center; gap:8px;
-      padding:9px 14px; border:1px solid var(--line); border-radius:999px;
-      background:#fff; cursor:pointer; font-weight:700;
+      padding:10px 14px; border:1px solid var(--line); border-radius:999px;
+      background:#fff; font-weight:700; cursor:pointer;
     }
-    .pill:hover{background:#fffefe}
+    .btn:hover{ background:#fffefe }
+    .btn.primary{
+      background:linear-gradient(90deg,var(--accent),var(--warm)); color:#fff; border-color:transparent;
+    }
 
-    footer{background:#ffe9e0;text-align:center;padding:20px;margin-top:32px;border-top:1px solid var(--line)}
+    /* ===== Article ===== */
+    .panel{
+      background:var(--card); border:1px solid var(--line); border-radius:16px;
+      padding:18px; box-shadow:0 4px 12px rgba(0,0,0,.06);
+    }
+    .meta{
+      display:flex; align-items:center; gap:12px; margin-bottom:8px;
+    }
+    .chip{
+      display:inline-grid; place-items:center; width:38px; height:38px;
+      border:1px solid var(--line); border-radius:50%; background:#fff; font-weight:700;
+    }
+    .chapter-title{ font-weight:700; color:#a24d7f; font-size:1.15rem }
+    .article p{ margin:0 0 1em; color:var(--ink-sub) }
+
+    footer{background:#ffe9e0; text-align:center; padding:20px; margin-top:24px; border-top:1px solid var(--line)}
+    /* ====== 3点メニューを強制的に見やすく＆確実に表示 ====== */
+    :root{ --dot-size:3px; --dot-gap:3px; } /* ← 好みで調整 */
+    .menu-btn{
+      position:relative; z-index:5;       /* 何かに隠れないよう保険 */
+      width:44px; height:44px;            /* 少しだけ大きく */
+      border-color:#e9cfe0;
+      box-shadow:0 1px 0 rgba(0,0,0,.03);
+    }
+    .menu-btn .dots{ gap:var(--dot-gap); }
+    .menu-btn .dots b{
+      width:var(--dot-size); height:var(--dot-size);
+      border-radius:50%; background:#a24d7f;
+    }
+
+    /* スマホ幅では必ず nav を隠し、ボタンを出す */
+    @media (max-width:860px){
+      .nav{ display:none !important; }
+      .menu-btn{ display:inline-flex !important; }
+    }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap bar">
+  <!-- Header -->
+  <header>
+    <div class="wrap head">
       <div class="brand">Cocona Fan Site</div>
-      <nav class="navbar">
+      <nav class="nav" aria-label="Global">
         <a href="index.html">Top</a>
         <a href="about_cocona.html">About</a>
-        <a class="active" href="story.html">Story</a> <!-- 章ページでは Story をアクティブ -->
+        <a class="active" href="story.html" aria-current="page">Story</a>
         <a href="gallery.html">Gallery</a>
         <a href="songs.html">Songs</a>
         <a href="goods.html">Goods</a>
         <a href="index.html#contact">Contact</a>
       </nav>
+      <button class="menu-btn" id="menuBtn" aria-label="メニューを開く">
+        <span class="dots" aria-hidden="true"><b></b><b></b><b></b></span>
+      </button>
+    </div>
+    <!-- Drawer -->
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <div class="back" id="drawerBack"></div>
+      <div class="panel">
+        <button class="close" id="drawerClose" aria-label="閉じる">✕</button>
+        <div class="logo">Cocona Fan Site</div>
+        <nav aria-label="Global mobile">
+          <a href="index.html">Top</a>
+          <a href="about_cocona.html">About</a>
+          <a class="active" href="story.html" aria-current="page">Story</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="songs.html">Songs</a>
+          <a href="goods.html">Goods</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+      </div>
     </div>
   </header>
 
-  <!-- HERO（タイトルは常に「Story」） -->
+  <!-- Hero -->
   <section class="hero">
-    <div class="wrap">
-      <h1 class="title">Story</h1>
-    </div>
+    <h1 class="title">Story</h1>
   </section>
 
   <main class="wrap">
-    <article class="reading">
-      <h2 class="chapter-head">第5章　― パリの小さな厨房で ―</h2>
+    <!-- Controls -->
+    <div class="controls"></div>
 
-      <div class="prose">
-        <p>　パリの街は、朝からパンとバターの香りに包まれていた。<br>
-          　ココナは石畳を小走りで駆け抜け、小さなビストロの扉を押し開ける。</p>
-
-        <p>「ボンジュール、ココナ！」<br>
-          　厨房から顔を出したのは、同い年の料理人リュカ。<br>
-          　短い金髪にエプロン姿、そして手には卵。</p>
-
-        <p>「今日の担当はオムレツじゃないの？」<br>
-          「うん、でも君の“日本風オムレツ”が食べたいってお客さんが来るかもって、シェフが言ってた」<br>
-          「えっ！？　私が作るの？」</p>
-
-        <p>　リュカはにやっと笑い、卵をココナに放った。<br>
-          「ほら、田舎娘の腕を見せてみろ」<br>
-          「……田舎娘は余計！」</p>
-
-        <p>　慣れた手つきで卵を割り、バターの溶けるフライパンへ。<br>
-          　香りが立った瞬間、祖母のキッチンが脳裏に浮かんだ。<br>
-          　ふわっと半月型に仕上げ、お皿へすべらせる。</p>
-
-        <p>「うん……これだ」<br>
-          　リュカが一口食べ、目を細める。<br>
-          「なんか優しい味がする」<br>
-          「そりゃあ、うちの祖母直伝だから」</p>
-
-        <p>　そのとき、シェフが厨房に現れた。<br>
-          「ココナ、世界を回って何を見つけた？」<br>
-          「……まだ全部じゃない。でも――」<br>
-          　ココナは少しだけ背筋を伸ばした。<br>
-          「“食べたら笑顔になる卵料理”が、私のゴールだってわかった」</p>
-
-        <p>　リュカが肩をすくめて笑う。<br>
-          「じゃあ、いつか一緒に作ろうぜ。世界一の卵料理」<br>
-          「うん、そのときは負けないから！」</p>
-
-        <p>　外に出ると、エッフェル塔が夕日に染まっていた。<br>
-          　ココナの胸の中にも、オレンジ色の灯がぽっとともった気がした。</p>
+    <!-- Article -->
+    <article class="panel article" aria-label="Story body">
+      <div class="meta">
+        <span class="chip">5</span>
+        <div class="chapter-title">第5章 ―パリの小さな厨房で―</div>
       </div>
 
-      <div class="toolbar">
-        <a class="pill" href="story.html">◀ 章一覧に戻る</a>
-        <a class="pill" href="ch4.html">◀ 前の章</a>
-        <a class="pill" href="ch6.html">次の章 ▶</a>
-      </div>
+      <!-- 本文：今のテキストをこの中に貼り替えてOK -->
+      <p>　パリの街は、朝からパンとバターの香りに包まれていた。<br>
+        　ココナは石畳を小走りで駆け抜け、小さなビストロの扉を押し開ける。</p>
+
+      <p>「ボンジュール、ココナ！」<br>
+        　厨房から顔を出したのは、同い年の料理人リュカ。<br>
+        　短い金髪にエプロン姿、そして手には卵。</p>
+
+      <p>「今日の担当はオムレツじゃないの？」<br>
+        「うん、でも君の“日本風オムレツ”が食べたいってお客さんが来るかもって、シェフが言ってた」<br>
+        「えっ！？　私が作るの？」</p>
+
+      <p>　リュカはにやっと笑い、卵をココナに放った。<br>
+        「ほら、田舎娘の腕を見せてみろ」<br>
+        「……田舎娘は余計！」</p>
+
+      <p>　慣れた手つきで卵を割り、バターの溶けるフライパンへ。<br>
+        　香りが立った瞬間、祖母のキッチンが脳裏に浮かんだ。<br>
+        　ふわっと半月型に仕上げ、お皿へすべらせる。</p>
+
+      <p>「うん……これだ」<br>
+        　リュカが一口食べ、目を細める。<br>
+        「なんか優しい味がする」<br>
+        「そりゃあ、うちの祖母直伝だから」</p>
+
+      <p>　そのとき、シェフが厨房に現れた。<br>
+        「ココナ、世界を回って何を見つけた？」<br>
+        「……まだ全部じゃない。でも――」<br>
+        　ココナは少しだけ背筋を伸ばした。<br>
+        「“食べたら笑顔になる卵料理”が、私のゴールだってわかった」</p>
+
+      <p>　リュカが肩をすくめて笑う。<br>
+        「じゃあ、いつか一緒に作ろうぜ。世界一の卵料理」<br>
+        「うん、そのときは負けないから！」</p>
+
+      <p>　外に出ると、エッフェル塔が夕日に染まっていた。<br>
+        　ココナの胸の中にも、オレンジ色の灯がぽっとともった気がした。</p>
     </article>
+
+    <!-- Controls（ページ下にも同じ2ボタンを置いておくと親切） -->
+    <div class="controls" style="justify-content:space-between">
+      <a class="btn primary" href="ch4.html">◀︎前の章へ</a>
+      <a class="btn" href="story.html">章一覧へ戻る</a>
+      <a class="btn primary" href="ch6.html">次の章へ ▶︎</a>
+    </div>
   </main>
 
-  <footer class="wrap" style="text-align:center;padding:20px 0;border-top:1px solid var(--line);margin-top:8px">
-    <p>© 2025 ココナファンサイト</p>
+  <footer>
+    <div class="wrap"><p>© 2025 ココナファンサイト</p></div>
   </footer>
 
   <script>
-    // ナビ反転（ヒーローは固定）
-    const THRESH = 40;
-    const onScroll = () => document.body.classList.toggle('scrolled', window.scrollY > THRESH);
-    addEventListener('scroll', onScroll, {passive:true});
-    addEventListener('load', onScroll);
+    // SPドロワー開閉
+    const menuBtn   = document.getElementById('menuBtn');
+    const drawer    = document.getElementById('drawer');
+    const drawerBack= document.getElementById('drawerBack');
+    const drawerClose=document.getElementById('drawerClose');
+    const openDrawer = ()=>{ drawer.classList.add('show'); drawer.setAttribute('aria-hidden','false'); }
+    const closeDrawer= ()=>{ drawer.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); }
+    menuBtn?.addEventListener('click', openDrawer);
+    drawerBack?.addEventListener('click', closeDrawer);
+    drawerClose?.addEventListener('click', closeDrawer);
+    addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
   </script>
 </body>
 </html>

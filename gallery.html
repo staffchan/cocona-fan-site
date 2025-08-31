@@ -14,7 +14,7 @@
       --accent:#f39ac6; --warm:#ffdfa8; --line:#f1e6ed; --card:#fff;
     }
     *{box-sizing:border-box}
-    html,body{margin:0}
+    html,body{margin:0; overflow-x:hidden}
     body{
       background:linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
       color:var(--ink);
@@ -25,20 +25,45 @@
     .wrap{max-width:1100px; margin:0 auto; padding:0 16px}
 
     /* ===== 共通ナビ（白地×黒字） ===== */
-    .site-header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line);}
-    .site-header .bar{display:flex; align-items:center; gap:20px; padding:10px 16px;}
-    .site-header .brand{font:700 20px/1 "Dancing Script",cursive; color:#af4a7f;}
-    .navbar{margin-left:auto; display:flex; gap:28px;}
+    .site-header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line)}
+    .site-header .bar{display:flex; align-items:center; gap:20px; padding:10px 16px}
+    .site-header .brand{font:700 20px/1 "Dancing Script",cursive; color:#af4a7f; white-space:nowrap}
+    @media (max-width:430px){ .site-header .brand{ font-size:18px } }
+
+    .navbar{margin-left:auto; display:flex; gap:28px}
     .navbar a{
       font:700 clamp(16px,1.8vw,20px) "Dancing Script",cursive;
       color:#222; position:relative; padding:8px 0; letter-spacing:.02em;
     }
-    .navbar a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s;}
+    .navbar a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s}
     .navbar a:hover::after, .navbar a.active::after{
       background:linear-gradient(90deg, var(--accent), var(--warm));
     }
 
-    /* ===== ヒーロー（ギャラリー既視感のデザイン） ===== */
+    /* --- スマホ用：横3点メニュー & ドロワー --- */
+    .menu-btn{
+      display:none; width:40px; height:40px; border-radius:999px;
+      border:1px solid var(--line); background:#fff; cursor:pointer;
+      align-items:center; justify-content:center; margin-left:auto;
+    }
+    .menu-btn .dots{display:inline-flex; align-items:center; gap:4px; transform:translateY(-1px)}
+    .menu-btn .dots b{display:block; width:3px; height:3px; border-radius:50%; background:#a24d7f}
+    @media (max-width:860px){ .navbar{display:none} .menu-btn{display:inline-flex} }
+
+    .drawer{position:fixed; inset:0; display:none; z-index:70}
+    .drawer.show{display:block}
+    .drawer .back{position:absolute; inset:0; background:rgba(0,0,0,.35)}
+    .drawer .panel{
+      position:absolute; top:0; right:0; width:min(78vw, 320px); height:100%;
+      background:#fff; border-left:1px solid var(--line); box-shadow:-8px 0 24px rgba(0,0,0,.18);
+      display:flex; flex-direction:column; padding:14px;
+    }
+    .drawer .close{align-self:flex-end; border:1px solid var(--line); background:#fff; border-radius:999px; width:36px; height:36px; cursor:pointer}
+    .drawer .logo{margin:6px 0 10px; font:700 22px "Dancing Script", cursive; color:#af4a7f}
+    .drawer nav a{display:block; padding:12px 6px; border-bottom:1px solid #f3e6ee; font:700 22px/1.2 "Dancing Script", cursive; color:#333}
+    .drawer nav a:hover{ background:linear-gradient(90deg,#ffe8f3,#ffefd9) }
+
+    /* ===== ヒーロー ===== */
     .hero{
       position:relative; display:grid; place-items:center;
       padding:44px 0; min-height:clamp(200px,24vh,300px);
@@ -81,17 +106,46 @@
       .grid{ grid-template-columns:repeat(3, minmax(0,1fr)); }
     }
 
+    /* figure の既定余白を消す＆行高の影響をゼロに */
+    .card{
+      margin:0;               /* ← 重要 */
+      line-height:0;          /* ← 画像の下に隙間が出るのを防止 */
+      border:1px solid var(--line);
+      border-radius:14px; overflow:hidden;
+      background:#fff; display:flex; align-items:center; justify-content:center;
+      aspect-ratio:4/3; position:relative; box-shadow:0 2px 8px rgba(0,0,0,.04);
+      cursor:default;
+    }
+    .card img{
+      display:block; width:100%; height:100%;  /* ← 重要：高さを明示 */
+      object-fit:cover;                         /* 全面表示（少しトリミング） */
+      object-position:center center;
+      background:#fff;
+    }
+    /* “トリミングせず余白アリで全部見せたい”なら上の cover を contain に */
+    /* .card img{ object-fit:contain; } */
+
+    /* タイトル帯は横いっぱい */
+    .cap{
+      position:absolute; left:0; right:0; bottom:0;
+      padding:10px 12px; border-top:1px solid #f1d6e5;
+      background:linear-gradient(90deg, #ffe8f3, #ffefd9);
+    }
+    .cap .t{
+      display:block; text-align:center; font-weight:700;
+      font-size:.95rem; color:#a24d7f; line-height:1.2;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
     /* 画像サムネ（拡大なし） */
     .card{
       border:1px solid var(--line); border-radius:14px; overflow:hidden;
       background:#fff; display:flex; align-items:center; justify-content:center;
       aspect-ratio:4/3; position:relative; box-shadow:0 2px 8px rgba(0,0,0,.04);
-      cursor:default; /* ← 拡大なしなのでポインタにしない */
+      cursor:default;
     }
     .card img{
       width:100%; height:100%; object-fit:contain; display:block; background:#fff;
     }
-    /* タイトル帯：横幅いっぱい */
     .cap{
       position:absolute; left:0; right:0; bottom:0;
       padding:10px 12px; border-top:1px solid #f1d6e5;
@@ -111,15 +165,39 @@
   <header class="site-header">
     <div class="wrap bar">
       <div class="brand">Cocona Fan Site</div>
-      <nav class="navbar">
+
+      <nav class="navbar" aria-label="Global">
         <a href="index.html">Top</a>
         <a href="about_cocona.html">About</a>
         <a href="story.html">Story</a>
-        <a class="active" href="gallery.html">Gallery</a>
+        <a class="active" href="gallery.html" aria-current="page">Gallery</a>
         <a href="songs.html">Songs</a>
         <a href="goods.html">Goods</a>
         <a href="index.html#contact">Contact</a>
       </nav>
+
+      <!-- スマホの横3点メニュー -->
+      <button class="menu-btn" id="menuBtn" aria-label="メニューを開く" aria-controls="drawer" aria-expanded="false">
+        <span class="dots" aria-hidden="true"><b></b><b></b><b></b></span>
+      </button>
+    </div>
+
+    <!-- ドロワー -->
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <div class="back" id="drawerBack"></div>
+      <div class="panel">
+        <button class="close" id="drawerClose" aria-label="閉じる">✕</button>
+        <div class="logo">Cocona Fan Site</div>
+        <nav aria-label="Global mobile">
+          <a href="index.html">Top</a>
+          <a href="about_cocona.html">About</a>
+          <a href="story.html">Story</a>
+          <a class="active" href="gallery.html" aria-current="page">Gallery</a>
+          <a href="songs.html">Songs</a>
+          <a href="goods.html">Goods</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -192,6 +270,18 @@
     });
 
     render('all');
+
+    // 3点メニュー ドロワー（他ページと同じ挙動）
+    const menuBtn   = document.getElementById('menuBtn');
+    const drawer    = document.getElementById('drawer');
+    const drawerBack= document.getElementById('drawerBack');
+    const drawerClose=document.getElementById('drawerClose');
+    const openDrawer = ()=>{ drawer.classList.add('show'); drawer.setAttribute('aria-hidden','false'); menuBtn?.setAttribute('aria-expanded','true'); }
+    const closeDrawer= ()=>{ drawer.classList.remove('show'); drawer.setAttribute('aria-hidden','true');  menuBtn?.setAttribute('aria-expanded','false'); }
+    menuBtn?.addEventListener('click', openDrawer);
+    drawerBack?.addEventListener('click', closeDrawer);
+    drawerClose?.addEventListener('click', closeDrawer);
+    addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
   </script>
 </body>
 </html>

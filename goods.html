@@ -41,6 +41,40 @@
     .nav a:hover::after{background:var(--accent)}
     .nav a.active::after{background:var(--accent)}
 
+    /* ==== SP用：横3点メニュー ==== */
+    .menu-btn{
+      display:none; width:40px; height:40px; border-radius:999px;
+      border:1px solid var(--line); background:#fff; cursor:pointer;
+      align-items:center; justify-content:center;
+    }
+    .menu-btn .dots{
+      display:inline-flex; align-items:center; gap:6px; transform:translateY(-1px);
+    }
+    .menu-btn .dots b{
+      display:block; width:3px; height:3px; border-radius:50%; background:#a24d7f;
+    }
+    /* ドロワー */
+    .drawer{position:fixed; inset:0; display:none; z-index:70}
+    .drawer.show{display:block}
+    .drawer .back{position:absolute; inset:0; background:rgba(0,0,0,.35)}
+    .drawer .panel{
+      position:absolute; top:0; right:0; width:min(78vw, 320px); height:100%;
+      background:#fff; border-left:1px solid var(--line);
+      box-shadow:-8px 0 24px rgba(0,0,0,.18);
+      display:flex; flex-direction:column; padding:14px;
+    }
+    .drawer .close{align-self:flex-end; border:1px solid var(--line); background:#fff; border-radius:999px; width:36px; height:36px; cursor:pointer}
+    .drawer .logo{margin:6px 0 10px; font:700 22px "Dancing Script", cursive; color:#af4a7f; text-align:left}
+    .drawer nav a{
+      display:block; padding:12px 6px; border-bottom:1px solid #f3e6ee;
+      font:700 22px/1.2 "Dancing Script", cursive; color:#333;
+    }
+    .drawer nav a:hover{ background:linear-gradient(90deg, #ffe8f3, #ffefd9) }
+    @media (max-width:860px){
+      .nav{display:none}
+      .menu-btn{display:inline-flex}
+    }
+
     /* ===== Hero（共通のふんわり帯） ===== */
     .hero{
       position:relative; display:grid; place-items:center;
@@ -111,6 +145,27 @@
         <a class="active" href="goods.html" aria-current="page">Goods</a>
         <a href="index.html#contact">Contact</a>
       </nav>
+      <!-- 追加：SP用 横3点メニュー -->
+      <button class="menu-btn" id="menuBtn" aria-label="メニューを開く">
+        <span class="dots" aria-hidden="true"><b></b><b></b><b></b></span>
+      </button>
+    </div>
+    <!-- ドロワー -->
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <div class="back" id="drawerBack"></div>
+      <div class="panel">
+        <button class="close" id="drawerClose" aria-label="閉じる">✕</button>
+        <div class="logo">Cocona Fan Site</div>
+        <nav aria-label="Global mobile">
+          <a href="index.html">Top</a>
+          <a href="about_cocona.html">About</a>
+          <a href="story.html">Story</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="songs.html">Songs</a>
+          <a class="active" href="goods.html" aria-current="page">Goods</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -161,5 +216,21 @@
       <p>© 2025 ココナファンサイト</p>
     </div>
   </footer>
+
+  <script>
+    // SPドロワー開閉
+    const menuBtn    = document.getElementById('menuBtn');
+    const drawer     = document.getElementById('drawer');
+    const drawerBack = document.getElementById('drawerBack');
+    const drawerClose= document.getElementById('drawerClose');
+
+    const openDrawer = ()=>{ drawer.classList.add('show'); drawer.setAttribute('aria-hidden','false'); };
+    const closeDrawer= ()=>{ drawer.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); };
+
+    menuBtn?.addEventListener('click', openDrawer);
+    drawerBack?.addEventListener('click', closeDrawer);
+    drawerClose?.addEventListener('click', closeDrawer);
+    addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+  </script>
 </body>
 </html>

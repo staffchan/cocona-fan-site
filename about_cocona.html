@@ -13,161 +13,220 @@
       --bg:#fffaf7; --ink:#222; --ink-sub:#6b6464;
       --accent:#f39ac6; --warm:#ffdfa8; --line:#f5d7e6; --card:#fff;
       --nav-size:clamp(16px,1.9vw,22px);
+      /* 画像フレーム用 */
+      --frame-grad: linear-gradient(135deg,#B88A2C,#F2D98B,#C09A3C);
+      --img-radius-pc: 18px;
+      --img-radius-sp: 14px;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0}
-    html{scroll-behavior:smooth}
+  
+    /* ========== Base ========== */
+    *{ box-sizing:border-box }
+    html,body{ margin:0 }
     body{
-      background: linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+      background:linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
       color:var(--ink);
       font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
       line-height:1.9;
     }
-    a{color:inherit; text-decoration:none}
-    .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
-
-    /* ===== Header（ロゴとナビを同じ段・常に白地） ===== */
-    header{
-      position:sticky; top:0; z-index:50;
-      background:#fff; border-bottom:1px solid var(--line);
-      backdrop-filter:saturate(120%) blur(6px);
+    a{ color:inherit; text-decoration:none }
+    .wrap{ max-width:1100px; margin:0 auto; padding:0 16px }
+  
+    /* ========== Header（PC: 横並び / SP: 3点メニュー） ========== */
+    header{ position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line) }
+    .head{ display:flex; align-items:center; justify-content:space-between; gap:18px; padding:10px 0 }
+    .brand{ font:700 22px "Dancing Script", cursive; color:#af4a7f }
+  
+    /* PCナビ */
+    .nav{ display:flex; gap:34px; align-items:center }
+    .nav a{
+      color:var(--ink);
+      font-family:"Dancing Script", cursive;
+      font-weight:700; font-size:var(--nav-size); line-height:1.1;
+      padding:8px 2px; position:relative;
     }
-    .bar{display:flex; align-items:center; gap:18px; padding:10px 0}
-    .brand{font:700 24px "Dancing Script", cursive; color:#af4a7f; white-space:nowrap}
-    nav[aria-label="global"]{margin-left:auto; display:flex; flex-wrap:wrap; gap:26px; align-items:center}
-    nav[aria-label="global"] a{
-      font:700 var(--nav-size) "Dancing Script", cursive;
-      color:var(--ink); position:relative; padding:6px 2px; line-height:1.1;
-    }
-    nav[aria-label="global"] a::after{
+    .nav a::after{
       content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
       background:transparent; transition:.2s;
     }
-    nav[aria-label="global"] a:hover::after,
-    nav[aria-label="global"] a.active::after{ background:var(--accent); }
-
-    /* ===== HERO（Gallery と同じ見た目） ===== */
+    .nav a:hover::after, .nav a.active::after{ background:var(--accent) }
+  
+    /* SPメニュー（3点） */
+    .menu-btn{
+      display:none; width:40px; height:40px; border-radius:999px;
+      border:1px solid var(--line); background:#fff; cursor:pointer;
+      align-items:center; justify-content:center;
+    }
+    .menu-btn span{ font-size:20px; letter-spacing:2px; color:#a24d7f; transform:translateY(-1px) }
+  
+    /* ドロワー */
+    .drawer{ position:fixed; inset:0; display:none; z-index:70 }
+    .drawer.show{ display:block }
+    .drawer .back{ position:absolute; inset:0; background:rgba(0,0,0,.35) }
+    .drawer .panel{
+      position:absolute; top:0; right:0; width:min(78vw, 320px); height:100%;
+      background:#fff; border-left:1px solid var(--line); box-shadow:-8px 0 24px rgba(0,0,0,.18);
+      display:flex; flex-direction:column; padding:14px;
+    }
+    .drawer .close{
+      align-self:flex-end; border:1px solid var(--line); background:#fff;
+      border-radius:999px; width:36px; height:36px; cursor:pointer;
+    }
+    .drawer .logo{ margin:6px 0 10px; font:700 22px "Dancing Script", cursive; color:#af4a7f; text-align:left }
+    .drawer nav a{
+      display:block; padding:12px 6px; border-bottom:1px solid #f3e6ee;
+      font:700 22px/1.2 "Dancing Script", cursive; color:#333;
+    }
+    .drawer nav a:hover{ background:linear-gradient(90deg, #ffe8f3, #ffefd9) }
+  
+    /* SP切替 */
+    @media (max-width:860px){
+      .nav{ display:none }
+      .menu-btn{ display:inline-flex }
+    }
+  
+    /* ========== Hero（帯） ========== */
     .hero{
-      position:relative;
-      display:grid; place-items:center;
-      padding:44px 0;
-      min-height:clamp(200px,24vh,300px);
+      position:relative; display:grid; place-items:center;
+      padding:44px 0; min-height:clamp(200px,24vh,300px);
       background:linear-gradient(90deg,#FFEAF6,#FFE1C2);
-      border-top:1px solid var(--line);
-      border-bottom:1px solid var(--line);
+      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
     }
     .hero .title{
-      margin:0; text-align:center;
-      color:#fff;                           /* 白字 */
-      text-shadow:0 6px 24px rgba(0,0,0,.25);/* ふわっと影 */
-      font:700 clamp(46px,7.2vw,84px) "Dancing Script", cursive;
-      line-height:1.05; letter-spacing:.5px;
+      margin:0; text-align:center; color:#fff; text-shadow:0 6px 24px rgba(0,0,0,.25);
+      font:700 clamp(46px,7.2vw,84px) "Dancing Script", cursive; line-height:1.05; letter-spacing:.5px;
     }
-    /* 上端の二重ライン */
     .hero::before,.hero::after{
-      content:""; position:absolute; left:16px; right:16px; height:1px;
-      background:rgba(255,255,255,.9); z-index:0;
+      content:""; position:absolute; left:16px; right:16px; height:1px; background:rgba(255,255,255,.9)
     }
     .hero::before{ top:6px }
-    .hero::after { top:10px; opacity:.6 }
-    .hero .wrap{ position:relative; z-index:1 }
-
-    /* （以前のスクロール反転を打ち消す：残っていてもこの指定が勝つ） */
-    body.scrolled .hero{ background:linear-gradient(90deg,#FFEAF6,#FFE1C2) !important; }
-    body.scrolled .hero .title{ color:#fff !important; text-shadow:0 6px 24px rgba(0,0,0,.25) !important; }
-
-    /* ===== Main ===== */
-    main{margin-top:8px}
-    .section{padding:24px 0}
-
-    /* 左：画像 ／ 右：自己紹介（1枠に集約） */
+    .hero::after{ top:10px; opacity:.6 }
+  
+    /* ========== About main ========== */
+    main{ margin-top:10px }
+    .section{ padding:20px 0 }
+  
+    /* 左画像・右テキスト（SPは縦積み） */
     .profile-flex{
-      display:grid; gap:16px; align-items:stretch;
-      grid-template-columns:1fr;  /* SP */
+      display:grid; gap:16px;
+      grid-template-columns:1fr;                 /* SP */
+      align-items:start;
     }
-    @media(min-width:980px){
-      .profile-flex{grid-template-columns:1fr 1.4fr}
+    @media (min-width:980px){
+      .profile-flex{ grid-template-columns:1fr 1.4fr }  /* PC */
     }
-
+  
+    /* 画像側：端末共通で金グラデ枠＋上端揃え（カード風は使わない） */
     .p-visual{
-      background:#fff;border:1px solid var(--line);border-radius:16px;
-      display:grid;place-items:center;padding:8px;box-shadow:0 4px 12px rgba(0,0,0,.06);
-      min-height:280px;
+      margin:0; padding:0;
+      background:transparent; border:none; box-shadow:none;
+      display:grid; align-items:start; justify-items:center;
+      min-height:320px; /* 値はお好みで */
     }
-    @media(min-width:980px){ .p-visual{min-height:380px} }
-    .p-visual img{max-width:100%;max-height:100%;object-fit:contain;display:block}
-
+    .p-visual img{
+      display:block; width:100%; height:auto;
+      object-fit:contain; object-position:top center; align-self:start;
+      padding:2px;                                      /* 枠の厚み（白の下地） */
+      border-radius:var(--img-radius-sp);
+      background:
+        linear-gradient(#fff,#fff) padding-box,         /* 内側（白） */
+        var(--frame-grad) border-box;                   /* 外周（金） */
+      border:2px solid transparent;
+      box-shadow:0 4px 12px rgba(0,0,0,.06);
+    }
+    @media (min-width:980px){
+      .p-visual img{ border-radius:var(--img-radius-pc) }
+    }
+  
+    /* テキスト側 */
     .intro{
-      background:var(--card);border:1px solid var(--line);border-radius:16px;
-      padding:16px 18px;box-shadow:0 4px 12px rgba(0,0,0,.06)
+      background:var(--card); border:1px solid var(--line); border-radius:16px;
+      padding:16px 18px; box-shadow:0 4px 12px rgba(0,0,0,.06);
+      margin:0;                                        /* 画像との段差を防止 */
     }
-    .intro h2.head{
-      margin:0 0 6px;color:#b04a81;font-size:clamp(22px,4.2vw,30px)
+    .intro h1{
+      margin:0 0 6px; color:#b04a81;
+      font:700 clamp(22px,4.2vw,30px) "Zen Kaku Gothic New", sans-serif;
     }
-    .intro p.lead{margin:0 0 12px;color:var(--ink-sub);font-size:clamp(16px,3.2vw,18px)}
-
-    /* サブ見出しは h2 相当のサイズで統一 */
+    .intro p.lead{ margin:0 0 12px; color:var(--ink-sub); font-size:16px }
     .intro h2{
-      margin:18px 0 8px;color:#a24d7f;font-size:clamp(22px,4.6vw,28px);
-      position:relative;
+      margin:18px 0 8px; color:#a24d7f;
+      font:700 clamp(22px,4.6vw,26px) "Zen Kaku Gothic New", sans-serif;
     }
-    .intro h2::after{
-      content:"";display:block;height:2px;width:72px;
-      background:linear-gradient(90deg,var(--accent),var(--warm));
-      border-radius:2px;margin-top:6px
-    }
-    .intro ul{margin:.2em 0 1em;padding-left:1.1em}
-    .intro li{margin:.18em 0;color:var(--ink-sub);font-size:16px}
-    .intro p{margin:.2em 0 1em;color:var(--ink-sub);font-size:16px}
-
-    footer{
-      background:#ffe9e0;text-align:center;padding:20px;margin-top:32px;border-top:1px solid var(--line)
-    }
+    .intro h2::after{ display:none }                   /* 見出しの下線は無し */
+    .intro ul{ margin:.2em 0 1em; padding-left:1.15em }
+    .intro li{ margin:.2em 0; color:var(--ink-sub); font-size:16px }
+    .intro p { margin:.2em 0 1em; color:var(--ink-sub); font-size:16px }
+  
+    /* Footer */
+    footer{ background:#ffe9e0; text-align:center; padding:20px; margin-top:24px; border-top:1px solid var(--line) }
   </style>
 </head>
 <body>
-  <!-- Header -->
+  <!-- ===== Header ===== -->
   <header>
-    <div class="wrap bar">
+    <div class="wrap head">
       <div class="brand">Cocona Fan Site</div>
-      <nav aria-label="global">
+
+      <!-- PCナビ -->
+      <nav class="nav" aria-label="Global">
         <a href="index.html">Top</a>
-        <a class="active" href="about_cocona.html">About</a>
+        <a class="active" href="about_cocona.html" aria-current="page">About</a>
         <a href="story.html">Story</a>
         <a href="gallery.html">Gallery</a>
         <a href="songs.html">Songs</a>
         <a href="goods.html">Goods</a>
-        <a href="index.html#contact">Contact</a>
+        <a href="mailto:hello@example.com?subject=%5BCocona%20Fan%20Site%5D%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%81%9B">Contact</a>
       </nav>
+
+      <!-- SPメニュー -->
+      <button class="menu-btn" id="menuBtn" aria-label="メニューを開く"><span>⋯</span></button>
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- SPドロワー -->
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="back" id="drawerBack" aria-hidden="true"></div>
+    <div class="panel" role="dialog" aria-label="メニュー">
+      <button class="close" id="drawerClose" aria-label="閉じる">✕</button>
+      <div class="logo">Cocona Fan Site</div>
+      <nav>
+        <a href="index.html">Top</a>
+        <a href="about_cocona.html">About</a>
+        <a href="story.html">Story</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="songs.html">Songs</a>
+        <a href="goods.html">Goods</a>
+        <a href="mailto:hello@example.com?subject=%5BCocona%20Fan%20Site%5D%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%81%9B">Contact</a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ===== HERO ===== -->
   <section class="hero">
     <div class="wrap">
       <h1 class="title">About Cocona</h1>
     </div>
   </section>
 
+  <!-- ===== Main ===== -->
   <main class="wrap">
     <section class="section">
       <div class="profile-flex">
-        <!-- 左：ビジュアル -->
         <figure class="p-visual">
-          <img src="media/cocona_main.png" alt="Cocona Belmette">
+          <!-- メイン画像 -->
+          <img src="media/cocona_main.png" alt="Cocona portrait">
         </figure>
 
-        <!-- 右：自己紹介（1枠に集約） -->
         <article class="intro">
-          <h2 class="head">Cocona Belmette</h2>
+          <h1>Cocona Belmette</h1>
           <p class="lead">世界の“しあわせレシピ”を探す、卵料理研究家。</p>
 
           <h2>基本情報</h2>
           <ul>
             <li><strong>名前：</strong>ココナ・ベルメット（Cocona Belmette）</li>
-            <li><strong>年齢：</strong>16歳（ニワトリ年齢換算。人間なら20歳位）</li>
+            <li><strong>年齢：</strong>16歳（ニワトリ年齢換算。人間なら20歳くらい）</li>
             <li><strong>誕生日：</strong>11月5日（いいたまごの日）</li>
-            <li><strong>出身地：</strong>コッコ村（にぎやかな森の奥にある、ニワトリたちの小さな村）</li>
+            <li><strong>出身地：</strong>コッコ村（にぎやかな森の奥の、小さなニワトリの村）</li>
           </ul>
 
           <h2>家族構成</h2>
@@ -205,5 +264,20 @@
       <p>© 2025 ココナファンサイト</p>
     </div>
   </footer>
+
+  <script>
+    // SPドロワー開閉
+    const menuBtn = document.getElementById('menuBtn');
+    const drawer = document.getElementById('drawer');
+    const drawerBack = document.getElementById('drawerBack');
+    const drawerClose = document.getElementById('drawerClose');
+    const openDrawer = () => { drawer.classList.add('show'); drawer.setAttribute('aria-hidden','false'); }
+    const closeDrawer = () => { drawer.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); }
+
+    menuBtn?.addEventListener('click', openDrawer);
+    drawerBack?.addEventListener('click', closeDrawer);
+    drawerClose?.addEventListener('click', closeDrawer);
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeDrawer(); });
+  </script>
 </body>
 </html>

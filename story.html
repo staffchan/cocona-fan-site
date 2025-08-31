@@ -5,241 +5,380 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Story | Cocona Fan Site</title>
 
-  <!-- 見出し/ナビ: Dancing Script、本文: Zen Kaku -->
+  <!-- 見出し: Dancing Script / 本文: Zen Kaku -->
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#fffaf7; --ink:#222; --muted:#6b6464;
+      --bg:#fffaf7; --ink:#222; --ink-sub:#6b6464;
       --accent:#f39ac6; --warm:#ffdfa8; --line:#f5d7e6; --card:#fff;
       --nav-size:clamp(16px,1.9vw,22px);
+      --frame-grad: linear-gradient(135deg,#B88A2C,#F2D98B,#C09A3C);
+      --img-radius-pc: 18px; --img-radius-sp: 14px;
     }
+
+    /* ===== Base ===== */
     *{box-sizing:border-box}
     html,body{margin:0}
-    html{scroll-behavior:smooth}
     body{
-      background: linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+      background:linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
       color:var(--ink);
       font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
       line-height:1.9;
     }
-    a{color:inherit; text-decoration:none}
+    a{color:inherit;text-decoration:none}
     .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
 
-    /* ===== Header（ロゴとナビを同じ段・常に白地） ===== */
-    header{
-      position:sticky; top:0; z-index:50;
-      background:#fff; border-bottom:1px solid var(--line);
-      backdrop-filter:saturate(120%) blur(6px);
-    }
-    .bar{display:flex; align-items:center; gap:18px; padding:10px 0}
-    .brand{font:700 24px "Dancing Script", cursive; color:#af4a7f; white-space:nowrap}
-    nav[aria-label="global"]{margin-left:auto; display:flex; flex-wrap:wrap; gap:26px; align-items:center}
-    nav[aria-label="global"] a{
-      font:700 var(--nav-size) "Dancing Script", cursive;
-      color:var(--ink); position:relative; padding:6px 2px; line-height:1.1;
-    }
-    nav[aria-label="global"] a::after{
-      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
-      background:transparent; transition:.2s;
-    }
-    nav[aria-label="global"] a:hover::after,
-    nav[aria-label="global"] a.active::after{ background:var(--accent); }
+    /* ===== Header（PC: 横並び / SP: 3点メニュー） ===== */
+    header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line)}
+    .head{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:10px 0}
+    .brand{font:700 22px "Dancing Script", cursive; color:#af4a7f}
 
-    /* ===== HERO（Gallery/Aboutと同じ） ===== */
+    .nav{display:flex; gap:34px; align-items:center}
+    .nav a{
+      color:var(--ink); font-family:"Dancing Script", cursive;
+      font-weight:700; font-size:var(--nav-size); line-height:1.1;
+      padding:8px 2px; position:relative;
+    }
+    .nav a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s}
+    .nav a:hover::after, .nav a.active::after{ background:var(--accent) }
+
+    .menu-btn{
+      display:none; width:40px; height:40px; border-radius:999px;
+      border:1px solid var(--line); background:#fff; cursor:pointer;
+      align-items:center; justify-content:center;
+    }
+    .menu-btn span{ font-size:20px; letter-spacing:2px; color:#a24d7f; transform:translateY(-1px) }
+    .drawer{position:fixed; inset:0; display:none; z-index:70}
+    .drawer.show{display:block}
+    .drawer .back{position:absolute; inset:0; background:rgba(0,0,0,.35)}
+    .drawer .panel{
+      position:absolute; top:0; right:0; width:min(78vw,320px); height:100%;
+      background:#fff; border-left:1px solid var(--line); box-shadow:-8px 0 24px rgba(0,0,0,.18);
+      display:flex; flex-direction:column; padding:14px;
+    }
+    .drawer .close{align-self:flex-end; border:1px solid var(--line); background:#fff; border-radius:999px; width:36px; height:36px; cursor:pointer}
+    .drawer .logo{margin:6px 0 10px; font:700 22px "Dancing Script", cursive; color:#af4a7f; text-align:left}
+    .drawer nav a{
+      display:block; padding:12px 6px; border-bottom:1px solid #f3e6ee;
+      font:700 22px/1.2 "Dancing Script", cursive; color:#333;
+    }
+    .drawer nav a:hover{ background:linear-gradient(90deg,#ffe8f3,#ffefd9) }
+    @media (max-width:860px){ .nav{display:none} .menu-btn{display:inline-flex} }
+
+    /* ===== Hero（帯） ===== */
     .hero{
-      position:relative;
-      display:grid; place-items:center;
-      padding:44px 0;
-      min-height:clamp(200px,24vh,300px);
+      position:relative; display:grid; place-items:center;
+      padding:44px 0; min-height:clamp(200px,24vh,300px);
       background:linear-gradient(90deg,#FFEAF6,#FFE1C2);
-      border-top:1px solid var(--line);
-      border-bottom:1px solid var(--line);
+      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
     }
     .hero .title{
-      margin:0; text-align:center;
-      color:#fff;
-      text-shadow:0 6px 24px rgba(0,0,0,.25);
-      font:700 clamp(46px,7.2vw,84px) "Dancing Script", cursive;
-      line-height:1.05; letter-spacing:.5px;
+      margin:0; text-align:center; color:#fff; text-shadow:0 6px 24px rgba(0,0,0,.25);
+      font:700 clamp(46px,7.2vw,84px) "Dancing Script", cursive; line-height:1.05; letter-spacing:.5px;
     }
-    /* 上端の二重ライン */
-    .hero::before,.hero::after{
-      content:""; position:absolute; left:16px; right:16px; height:1px;
-      background:rgba(255,255,255,.9); z-index:0;
-    }
-    .hero::before{ top:6px }
-    .hero::after { top:10px; opacity:.6 }
-    .hero .wrap{ position:relative; z-index:1 }
+    .hero::before,.hero::after{content:"";position:absolute;left:16px;right:16px;height:1px;background:rgba(255,255,255,.9)}
+    .hero::before{top:6px}
+    .hero::after{top:10px;opacity:.6}
 
-    /* 反転対策（スクロール時も白文字のまま） */
-    body.scrolled .hero{
-      background:linear-gradient(90deg,#FFEAF6,#FFE1C2) !important;
+    /* ===== Main（PC: 左画像/右章一覧） ===== */
+    main{margin-top:10px}
+    .story-grid{
+      display:grid; gap:16px; align-items:start;
+      grid-template-columns:1fr;           /* SP 縦並び */
     }
-    body.scrolled .hero .title{
-      color:#fff !important; text-shadow:0 6px 24px rgba(0,0,0,.25) !important;
+    @media (min-width:860px){
+      .story-grid{ grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) } /* PCは左少し広め */
     }
 
-    /* ===== Content ===== */
-    main{margin-top:8px}
+    /* 左：ビジュアル（金のグラデ枠） */
+    .visual{
+      background:#fff; border:1px solid var(--line); border-radius:16px;
+      padding:8px; display:grid; place-items:center;
+      box-shadow:0 4px 12px rgba(0,0,0,.06); min-height:320px;
+    }
+    /* 金枠用のラッパー */
+    .frame{
+      width:100%;
+      padding:2px; border:2px solid transparent; border-radius:var(--img-radius-pc);
+      background:
+        linear-gradient(#fff,#fff) padding-box,  /* 内側（白） */
+        var(--frame-grad) border-box;            /* 外周（金グラデ） */
+      box-shadow:0 4px 12px rgba(0,0,0,.06);
+    }
+    .cover{
+      height:min(82vh,900px);
+      border-radius:calc(var(--img-radius-pc) - 2px);
+      background:#fff center/contain no-repeat;
+    }
+    /* 画像指定は inline style の background-image で */
+    @media (max-width:980px){
+      .frame{ border-radius:var(--img-radius-sp) }
+      .cover{ border-radius:calc(var(--img-radius-sp) - 2px) }
+    }
+
+    /* 右：章一覧パネル */
     .panel{
       background:var(--card); border:1px solid var(--line); border-radius:16px;
       padding:14px; box-shadow:0 4px 12px rgba(0,0,0,.06);
     }
+    .panel h2{margin:4px 4px 10px; font-weight:700; color:#a24d7f}
 
-    .story-flex{
-      display:grid; gap:14px; align-items:stretch;
-      grid-template-columns:1fr;              /* SP */
-    }
-    @media(min-width:960px){
-      .story-flex{ grid-template-columns:1.1fr 1.4fr; }
-    }
+    /* 章一覧（常に1列） */
+    .chapters{ display:grid; gap:12px; grid-template-columns:1fr }
 
-    .visual{
-      border:1px solid var(--line); border-radius:14px; overflow:hidden;
-      min-height:260px; background:#fff;
-    }
-    .visual .thumb{
-      width:100%; height:100%; min-height:260px;
-      background: url('media/feature-story.PNG') center 12% / cover no-repeat; /* ← 位置はここで微調整可 */
-    }
-    @media(min-width:960px){ .visual .thumb{ min-height:420px } }
-
-    .chapters{ display:grid; gap:10px }
-    .note{ color:var(--muted); font-size:.95rem; margin:0 0 6px }
-
-    .btn{
-      display:flex; align-items:center; gap:10px;
+    /* ボタン（.ch / .chapter 両対応） */
+    .ch, .chapter, .chapters .card{
+      width:100%; display:flex; align-items:center; justify-content:space-between; gap:14px;
       padding:14px 16px; border:1px solid var(--line); border-radius:14px;
-      background:#fff; cursor:pointer;
-      box-shadow:0 2px 8px rgba(0,0,0,.04);
+      background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.04);
+      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+      cursor:pointer; font-size:1rem;
     }
-    .btn:hover{ background:#fffefe }
-    .badge{
-      flex:0 0 auto; display:inline-grid; place-items:center;
-      width:42px; height:42px; border-radius:10px;
-      background:linear-gradient(90deg,var(--accent),var(--warm)); color:#fff; font-weight:700;
-      box-shadow:0 4px 10px rgba(0,0,0,.12);
+    .ch:hover, .chapter:hover, .chapters .card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 18px rgba(0,0,0,.10);
+      border-color:#f1d6e5;
+      background:linear-gradient(90deg,var(--accent),var(--warm));
+      color:#fff;
     }
-    .btn .t{ font-weight:700; color:#a24d7f }
-    .btn .s{ color:var(--muted); font-size:.92rem }
+
+    /* 番号バッジ（.badge or .ch-num） */
+    .ch .badge, .chapter .ch-num{
+      flex:0 0 auto; display:grid; place-items:center;
+      width:42px; height:42px; border-radius:50%;
+      border:1px solid var(--line); background:#fff; font-weight:700;
+    }
+    .ch:hover .badge, .chapter:hover .ch-num{ background:#fff; color:#a24d7f }
+
+    /* タイトル/サブ（.title/.sub or .ch-title/.ch-lead） */
+    .ch .title, .chapter .ch-title{ font-weight:700 }
+    .ch .sub,   .chapter .ch-lead{ color:var(--ink-sub); font-size:.95rem; line-height:1.6 }
+    /* === 画像の周りの余白をゼロにする（上書き） === */
+    .visual{
+      padding: 0 !important;           /* ← 内側余白を削除 */
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;      /* 影も不要なら */
+    }
+
+    /* 金枠の角丸をカードと揃える（見切れ防止） */
+    .frame{
+      border-radius: 16px !important;   /* 既存カードと同じ角丸 */
+    }
+    .cover{
+      border-radius: 14px !important;   /* 金枠の内側（16px-2px） */
+    }
+
+    /* もしまだ外側に細い余白が見える場合は、親のカードにも適用（任意） */
+    /* .visual を包む親が figure などで余白があれば… */
+    /*
+    .visual:where(figure){
+      margin:0 !important;
+    }
+    */
+    /* 白い縁をなくして金枠を border-image に変更 */
+    .visual{ padding:0; background:transparent; border:none; box-shadow:none; } /* 外側余白はゼロでOK */
+
+    .frame{
+      /* 内側の白縁を作らない */
+      padding:0;
+      border-radius:16px;
+      overflow:hidden;                /* 角丸で画像をクリップ */
+      background:none;
+
+      /* 金のグラデ枠（画像に密着） */
+      border:4px solid transparent;   /* 枠の太さはお好みで 2~6px */
+      border-image: linear-gradient(135deg,#B88A2C,#F2D98B,#C09A3C) 1;
+    }
+
+    .cover{
+      /* 画像は金枠に密着。背景色は透明に */
+      height:min(82vh, 900px);
+      background: var(--bg) center/contain no-repeat;  /* ← 画像（--bg）だけ */
+      border-radius:0;                                 /* 角は .frame の overflow で丸める */
+    }
+    /* 左ビジュアルの外側カードは不要 */
+    .visual{
+      padding:0;
+      background:transparent;
+      border:none;
+      box-shadow:none;
+    }
+
+    /* 金のグラデ枠（内側の白い縁は作らない） */
+    .frame{
+      border-radius:18px;            /* 丸角 */
+      overflow:hidden;               /* 画像を角丸でクリップ */
+      /* ← ここから重ね背景方式。上のレイヤーが内側の白、下が外周グラデ */
+      background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #B88A2C, #F2D98B, #C09A3C) border-box;
+      border:3px solid transparent;  /* 透明ボーダーに背景を“切り分けて”塗る */
+    }
+    .kv{
+      display:block; width:100%; height:auto;   /* 画像は枠に密着（余白ゼロ） */
+    }
+
+    /* スマホは丸角だけ少し控えめにしたい場合 */
+    @media (max-width: 980px){
+      .frame{ border-radius:14px; }
+    }
+    /* PC時：章一覧カードを少し下げて左画像の天面と揃える */
+    @media (min-width: 860px){
+      .panel{
+        margin-top: 12px;   /* 8〜16pxの範囲で好み調整。まずは12pxがおすすめ */
+      }
+    }
   </style>
 </head>
 <body>
   <!-- Header -->
   <header>
-    <div class="wrap bar">
+    <div class="wrap head">
       <div class="brand">Cocona Fan Site</div>
-      <nav aria-label="global">
+      <nav class="nav" aria-label="Global">
         <a href="index.html">Top</a>
         <a href="about_cocona.html">About</a>
-        <a class="active" href="story.html">Story</a>
+        <a class="active" href="story.html" aria-current="page">Story</a>
         <a href="gallery.html">Gallery</a>
         <a href="songs.html">Songs</a>
         <a href="goods.html">Goods</a>
         <a href="index.html#contact">Contact</a>
       </nav>
+      <button class="menu-btn" id="menuBtn" aria-label="メニューを開く"><span>⋯</span></button>
+    </div>
+    <!-- Drawer -->
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <div class="back" id="backdrop"></div>
+      <div class="panel" role="dialog" aria-label="メニュー">
+        <button class="close" id="closeDr">✕</button>
+        <div class="logo">Cocona Fan Site</div>
+        <nav>
+          <a href="index.html">Top</a>
+          <a href="about_cocona.html">About</a>
+          <a href="story.html" aria-current="page">Story</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="songs.html">Songs</a>
+          <a href="goods.html">Goods</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+      </div>
     </div>
   </header>
 
   <!-- Hero -->
   <section class="hero">
-    <div class="wrap">
-      <h1 class="title">Story</h1>
-    </div>
+    <h1 class="title">Story</h1>
   </section>
 
   <main class="wrap">
-    <section class="panel" aria-label="ココナ物語">
-      <div class="story-flex">
-        <!-- 左：ビジュアル -->
-        <figure class="visual" aria-hidden="true">
-          <div class="thumb"></div>
+    <section class="story-grid" aria-label="ストーリートップ">
+      <!-- 左：ビジュアル（金枠＋全体表示） -->
+      <div class="visual">
+        <figure class="frame">
+          <img class="kv" src="media/feature-story.PNG" alt="Cocona key visual">
         </figure>
-
-        <!-- 右：章ボタン一覧 -->
-        <div>
-          <p class="note">読みたい章を選んでね。</p>
-          <div class="chapters" role="list">
-            <a class="btn" href="prologue.html" role="listitem">
-              <span class="badge">序</span>
-              <span>
-                <span class="t">序章　— 田舎の朝、卵の香り —</span><br>
-                <span class="s">ココナの原点、祖母の台所と朝の養鶏場。</span>
-              </span>
-            </a>
-
-            <a class="btn" href="ch1.html" role="listitem">
-              <span class="badge">1</span>
-              <span>
-                <span class="t">第1章　— 上京、そして運命の一皿 —</span><br>
-                <span class="s">黄金色の半熟が、世界の扉を開く。</span>
-              </span>
-            </a>
-
-            <a class="btn" href="ch2.html" role="listitem">
-              <span class="badge">2</span>
-              <span>
-                <span class="t">第2章　— 卵は、世界のパスポート —</span><br>
-                <span class="s">卵を“踊らせる”。マルセルの教え。</span>
-              </span>
-            </a>
-
-            <a class="btn" href="ch3.html" role="listitem">
-              <span class="badge">3</span>
-              <span>
-                <span class="t">第3章　— 初めての空と、スペインの卵 —</span><br>
-                <span class="s">雲はメレンゲ、路地はオリーブの香り。</span>
-              </span>
-            </a>
-
-            <a class="btn" href="ch4.html" role="listitem">
-              <span class="badge">4</span>
-              <span>
-                <span class="t">第4章　— 屋台の煙と、黄金色のカイジアオ —</span><br>
-                <span class="s">カリッとふち、ふわっと心。汁のシミも旅の模様。</span>
-              </span>
-            </a>
-
-            <a class="btn" href="ch5.html" role="listitem">
-              <span class="badge">5</span>
-              <span>
-                <span class="t">第5章　— パリの小さな厨房で —</span><br>
-                <span class="s">“食べたら笑顔になる卵料理”へ。</span>
-              </span>
-            </a>
-
-            <a class="btn" href="ch6.html" role="listitem">
-              <span class="badge">6</span>
-              <span>
-                <span class="t">第6章　— リマの空に、卵は落ちた —</span><br>
-                <span class="s">弱火の失敗、でも「腹は満たされた」。</span>
-              </span>
-            </a>
-
-            <a class="btn" href="ch7.html" role="listitem">
-              <span class="badge">7</span>
-              <span>
-                <span class="t">第7章　— 卵の地図がつながるとき —</span><br>
-                <span class="s">君はもう、世界の地図を持ってる。</span>
-              </span>
-            </a>
-
-            <a class="btn" href="final.html" role="listitem">
-              <span class="badge">終</span>
-              <span>
-                <span class="t">最終章　— 世界一の卵フェス —</span><br>
-                <span class="s">ぜんぶの国をひと皿に。夜空までの湯気。</span>
-              </span>
-            </a>
-          </div>
-        </div>
       </div>
+
+      <!-- 右：章一覧（1列） -->
+      <aside class="panel">
+        <h2>Chapters</h2>
+        <div class="chapters">
+          <a class="ch" href="prologue.html">
+            <div class="badge">序</div>
+            <div class="main">
+              <div class="title">序章　— 田舎の朝、卵の香り —</div>
+              <div class="sub">祖母の台所と養鶏場。ココナの原点。</div>
+            </div>
+            <div aria-hidden="true">▶</div>
+          </a>
+          <a class="ch" href="ch1.html">
+            <div class="badge">1</div>
+            <div class="main">
+              <div class="title">第1章　— 上京、そして運命の一皿 —</div>
+              <div class="sub">路地裏カフェで出会う、黄金の半熟。</div>
+            </div>
+            <div aria-hidden="true">▶</div>
+          </a>
+          <a class="ch" href="ch2.html">
+            <div class="badge">2</div>
+            <div class="main">
+              <div class="title">第2章　— 卵は、世界のパスポート —</div>
+              <div class="sub">「卵を踊らせろ」——マルセルの教え。</div>
+            </div>
+            <div aria-hidden="true">▶</div>
+          </a>
+          <a class="ch" href="ch3.html">
+            <div class="badge">3</div>
+            <div class="main">
+              <div class="title">第3章　— 初めての空と、スペインの卵 —</div>
+              <div class="sub">厚みのある黄金、トルティージャ。</div>
+            </div>
+            <div aria-hidden="true">▶</div>
+          </a>
+          <a class="ch" href="ch4.html">
+            <div class="badge">4</div>
+            <div class="main">
+              <div class="title">第4章　— 屋台の煙と、黄金色のカイジアオ —</div>
+              <div class="sub">カリふわ革命。ページに残る旅のシミ。</div>
+            </div>
+            <div aria-hidden="true">▶</div>
+          </a>
+          <a class="ch" href="ch5.html">
+            <div class="badge">5</div>
+            <div class="main">
+              <div class="title">第5章　— パリの小さな厨房で —</div>
+              <div class="sub">“食べたら笑顔になる卵料理”。</div>
+            </div>
+            <div aria-hidden="true">▶</div>
+          </a>
+          <a class="ch" href="ch6.html">
+            <div class="badge">6</div>
+            <div class="main">
+              <div class="title">第6章　— リマの空に、卵は落ちた —</div>
+              <div class="sub">失敗と、ひとこと。「腹は満たされた」。</div>
+            </div>
+            <div aria-hidden="true">▶</div>
+          </a>
+          <a class="ch" href="ch7.html">
+            <div class="badge">7</div>
+            <div class="main">
+              <div class="title">第7章　— 卵の地図がつながるとき —</div>
+              <div class="sub">君はもう、世界の地図を持ってる。</div>
+            </div>
+            <div aria-hidden="true">▶</div>
+          </a>
+          <a class="ch" href="final.html">
+            <div class="badge">終</div>
+            <div class="main">
+              <div class="title">最終章　— 世界一の卵フェス —</div>
+              <div class="sub">ぜんぶの国をひと皿に。笑顔の湯気。</div>
+            </div>
+            <div aria-hidden="true">▶</div>
+          </a>
+        </div>
+      </aside>
     </section>
   </main>
 
-  <footer class="wrap" style="text-align:center;padding:20px 0;border-top:1px solid var(--line);margin-top:8px">
-    <p>© 2025 ココナファンサイト</p>
+  <footer style="background:#ffe9e0; border-top:1px solid var(--line);">
+    <div class="wrap" style="padding:20px">
+      <p>© 2025 ココナファンサイト</p>
+    </div>
   </footer>
+
+  <script>
+    // Drawer open/close
+    const drawer   = document.getElementById('drawer');
+    const menuBtn  = document.getElementById('menuBtn');
+    const closeDr  = document.getElementById('closeDr');
+    const backdrop = document.getElementById('backdrop');
+    const openDr = ()=>{ drawer.classList.add('show'); drawer.setAttribute('aria-hidden','false') };
+    const closeDrawer = ()=>{ drawer.classList.remove('show'); drawer.setAttribute('aria-hidden','true') };
+    menuBtn?.addEventListener('click', openDr);
+    closeDr?.addEventListener('click', closeDrawer);
+    backdrop?.addEventListener('click', closeDrawer);
+  </script>
 </body>
 </html>

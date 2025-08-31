@@ -27,13 +27,47 @@
   .site-header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line)}
   .site-header .bar{display:flex;align-items:center;gap:20px;padding:10px 16px}
   .brand{font:700 20px/1 "Dancing Script",cursive;color:#af4a7f}
+
   .navbar{margin-left:auto;display:flex;gap:28px}
   .navbar a{
-    font:700 clamp(16px,1.8vw,20px) "Dancing+Script",cursive;
+    font:700 clamp(16px,1.8vw,20px) "Dancing Script",cursive;
     color:#222; position:relative; padding:8px 0; letter-spacing:.02em;
   }
   .navbar a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:transparent;transition:.2s}
   .navbar a:hover::after,.navbar a.active::after{background:linear-gradient(90deg,var(--accent),var(--warm))}
+
+  /* === SP用：横3点メニュー（3pxドット） === */
+  .menu-btn{
+    display:none; width:40px; height:40px; border-radius:999px;
+    border:1px solid var(--line); background:#fff; cursor:pointer;
+    align-items:center; justify-content:center; margin-left:auto;
+  }
+  .menu-btn .dots{display:inline-flex;align-items:center;gap:4px;transform:translateY(-1px)}
+  .menu-btn .dots b{display:block;width:3px;height:3px;border-radius:50%;background:#a24d7f}
+  .menu-btn:active .dots b{transform:scale(1.25)}
+
+  /* SP: ナビ非表示→3点ボタン表示 */
+  @media (max-width:860px){
+    .navbar{display:none}
+    .menu-btn{display:inline-flex}
+  }
+
+  /* ドロワー */
+  .drawer{position:fixed; inset:0; display:none; z-index:70}
+  .drawer.show{display:block}
+  .drawer .back{position:absolute; inset:0; background:rgba(0,0,0,.35)}
+  .drawer .panel{
+    position:absolute; top:0; right:0; width:min(78vw, 320px); height:100%;
+    background:#fff; border-left:1px solid var(--line); box-shadow:-8px 0 24px rgba(0,0,0,.18);
+    display:flex; flex-direction:column; padding:14px;
+  }
+  .drawer .close{align-self:flex-end; border:1px solid var(--line); background:#fff; border-radius:999px; width:36px; height:36px; cursor:pointer}
+  .drawer .logo{margin:6px 0 10px; font:700 22px "Dancing Script", cursive; color:#af4a7f; text-align:left}
+  .drawer nav a{
+    display:block; padding:12px 6px; border-bottom:1px solid #f3e6ee;
+    font:700 22px/1.2 "Dancing Script", cursive; color:#333;
+  }
+  .drawer nav a:hover{ background:linear-gradient(90deg, #ffe8f3, #ffefd9) }
 
   /* === ヒーロー === */
   .hero{
@@ -104,15 +138,40 @@
   <header class="site-header">
     <div class="wrap bar">
       <div class="brand">Cocona Fan Site</div>
-      <nav class="navbar">
+
+      <!-- PCナビ -->
+      <nav class="navbar" aria-label="Global">
         <a href="index.html">Top</a>
         <a href="about_cocona.html">About</a>
         <a href="story.html">Story</a>
         <a href="gallery.html">Gallery</a>
-        <a class="active" href="songs.html">Songs</a>
+        <a class="active" href="songs.html" aria-current="page">Songs</a>
         <a href="goods.html">Goods</a>
         <a href="index.html#contact">Contact</a>
       </nav>
+
+      <!-- SP：横3点メニュー -->
+      <button class="menu-btn" id="menuBtn" aria-label="メニューを開く" aria-expanded="false" aria-controls="drawer">
+        <span class="dots" aria-hidden="true"><b></b><b></b><b></b></span>
+      </button>
+    </div>
+
+    <!-- ドロワー -->
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <div class="back" id="drawerBack"></div>
+      <div class="panel">
+        <button class="close" id="drawerClose" aria-label="閉じる">✕</button>
+        <div class="logo">Cocona Fan Site</div>
+        <nav aria-label="Global mobile">
+          <a href="index.html">Top</a>
+          <a href="about_cocona.html">About</a>
+          <a href="story.html">Story</a>
+          <a href="gallery.html">Gallery</a>
+          <a class="active" href="songs.html" aria-current="page">Songs</a>
+          <a href="goods.html">Goods</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -132,19 +191,19 @@
   </footer>
 
   <script>
-    /* ====== 曲データ（新しいファイル名に更新） ====== */
+    /* ====== 曲データ ====== */
     const BASE = 'media/songs/';  // songs.html からの相対パス
     const TRACKS = [
       { title:'最強モード',       note:'アップテンポBGM',  src: BASE + 'saikyou-mode.mp3' },
-      { title:'たまごかぞえうた', note:'ココナの数え歌',    src: BASE + 'egg kazoeuta.mp3' },
+      { title:'たまごかぞえうた', note:'ココナの数え歌',    src: BASE + 'egg kazoeuta.wav' },
       { title:'ココナステージ',   note:'小さなライブ用BGM', src: BASE + 'Cocona Stage.mp3' },
     ];
-    
+
     const $  = s => document.querySelector(s);
     const $$ = s => [...document.querySelectorAll(s)];
     const listEl = document.getElementById('list');
     let currentAudio = null; // 再生中 audio
-    
+
     function rowTemplate(i, t){
       return `
         <button class="track" data-i="${i}" aria-pressed="false">
@@ -163,7 +222,7 @@
         </button>
       `;
     }
-    
+
     function build(){
       listEl.innerHTML = TRACKS.map((t,i)=>rowTemplate(i,t)).join('');
       $$('.track').forEach((row,i)=>{
@@ -173,18 +232,14 @@
         });
       });
     }
-    
-    /* ---------- パス候補を総当たり（未エンコード / encodeURI / NFC / NFD） ---------- */
+
+    /* ---------- パス候補（未エンコード / encodeURI / NFC / NFD） ---------- */
     function candidatesFor(raw){
       const nfc = raw.normalize('NFC');
-      const nfd = raw.normalize('NFD'); // mac の Finder 由来のファイルで起きがち
-      return [...new Set([
-        raw, nfc, nfd,
-        encodeURI(raw), encodeURI(nfc), encodeURI(nfd)
-      ])];
+      const nfd = raw.normalize('NFD');
+      return [...new Set([ raw, nfc, nfd, encodeURI(raw), encodeURI(nfc), encodeURI(nfd) ])];
     }
-    
-    /* 読み込んで再生できたら resolve */
+
     function tryLoadAndPlay(audio, path){
       return new Promise((resolve, reject)=>{
         const onCan = ()=>{ cleanup(); audio.play().then(resolve).catch(reject); };
@@ -199,33 +254,25 @@
         audio.load();
       });
     }
-    
-    /* すべての候補を順に試す */
+
     async function smartPlay(audio, rawPath){
       audio.volume = 1; audio.muted = false;
       let lastErr = null;
       for(const p of candidatesFor(rawPath)){
         try{
-          console.log('[try]', p);
           await tryLoadAndPlay(audio, p);
-          console.log('[OK]', p);
           return p;
-        }catch(e){
-          console.warn('[NG]', p, e?.message || e);
-          lastErr = e;
-        }
+        }catch(e){ lastErr = e; }
       }
       throw lastErr || new Error('play-failed');
     }
-    
-    /* 行の UI を開始状態にする */
+
     function setPlaying(row, on){
       row.classList.toggle('playing', on);
       row.setAttribute('aria-pressed', on ? 'true' : 'false');
       row.querySelector('.icon').textContent = on ? '❚❚' : '▶︎';
     }
-    
-    /* 再生停止（UIとAudio） */
+
     function stopRow(row){
       if(!row) return;
       const audio = row.querySelector('audio');
@@ -233,46 +280,63 @@
       setPlaying(row, false);
       if(currentAudio === audio) currentAudio = null;
     }
-    
-    /* クリックでトグル */
+
     async function toggle(i, row){
       const audio = row.querySelector('audio');
       const msg   = row.querySelector('.msg');
       msg.classList.add('hidden'); msg.textContent = '';
-    
-      // 他の曲を止める
+
       if(currentAudio && currentAudio !== audio){
         stopRow(currentAudio.closest('.track'));
       }
-    
+
       if(audio.paused){
         try{
           const okSrc = await smartPlay(audio, TRACKS[i].src);
           setPlaying(row, true);
           currentAudio = audio;
-          // 失敗したとき用に「直接開く」リンクを準備
-          msg.dataset.oksrc = okSrc;
+          msg.dataset.oksrc = okSrc; // 参考用
         }catch(e){
           setPlaying(row, false);
           const raw = TRACKS[i].src;
-          const hint = `
-            音声を読み込めませんでした。<br>
-            ・songs.html からの相対パス：<code>${raw}</code><br>
-            ・拡張子は <code>.mp3</code><br>
-            ・ファイル/フォルダ名の大文字小文字・スペースを確認<br>
-            <a href="${encodeURI(raw)}" target="_blank" rel="noopener">→ 直接ファイルを開く</a>
-          `;
-          msg.innerHTML = hint;
+          msg.innerHTML =
+            '音声を読み込めませんでした。<br>' +
+            '・songs.html からの相対パス：<code>'+raw+'</code><br>' +
+            '・拡張子は <code>.mp3</code><br>' +
+            '・ファイル/フォルダ名の大文字小文字・スペースを確認<br>' +
+            '<a href="'+encodeURI(raw)+'" target="_blank" rel="noopener">→ 直接ファイルを開く</a>';
           msg.classList.remove('hidden');
         }
       }else{
         stopRow(row);
       }
-    
+
       audio.onended = ()=> stopRow(row);
     }
-    
+
     build();
-    </script>
+
+    /* ====== SPドロワー開閉 ====== */
+    const menuBtn     = document.getElementById('menuBtn');
+    const drawer      = document.getElementById('drawer');
+    const drawerBack  = document.getElementById('drawerBack');
+    const drawerClose = document.getElementById('drawerClose');
+
+    const openDrawer = ()=>{
+      drawer.classList.add('show');
+      drawer.setAttribute('aria-hidden','false');
+      menuBtn?.setAttribute('aria-expanded','true');
+    };
+    const closeDrawer = ()=>{
+      drawer.classList.remove('show');
+      drawer.setAttribute('aria-hidden','true');
+      menuBtn?.setAttribute('aria-expanded','false');
+    };
+
+    menuBtn?.addEventListener('click', openDrawer);
+    drawerBack?.addEventListener('click', closeDrawer);
+    drawerClose?.addEventListener('click', closeDrawer);
+    addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+  </script>
 </body>
 </html>
