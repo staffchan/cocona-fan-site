@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gallery | Cocona Fan Site</title>
 
-  <!-- 見出し/ナビ: Dancing Script、本文: Zen Kaku -->
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
@@ -14,7 +13,7 @@
       --accent:#f39ac6; --warm:#ffdfa8; --line:#f1e6ed; --card:#fff;
     }
     *{box-sizing:border-box}
-    html,body{margin:0; overflow-x:hidden}
+    html,body{margin:0}
     body{
       background:linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
       color:var(--ink);
@@ -24,33 +23,29 @@
     a{color:inherit;text-decoration:none}
     .wrap{max-width:1100px; margin:0 auto; padding:0 16px}
 
-    /* ===== 共通ナビ（白地×黒字） ===== */
+    /* ===== 共通ナビ ===== */
     .site-header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line)}
     .site-header .bar{display:flex; align-items:center; gap:20px; padding:10px 16px}
-    .site-header .brand{font:700 20px/1 "Dancing Script",cursive; color:#af4a7f; white-space:nowrap}
-    @media (max-width:430px){ .site-header .brand{ font-size:18px } }
-
+    .brand{font:700 20px/1 "Dancing Script",cursive; color:#af4a7f}
     .navbar{margin-left:auto; display:flex; gap:28px}
     .navbar a{
       font:700 clamp(16px,1.8vw,20px) "Dancing Script",cursive;
       color:#222; position:relative; padding:8px 0; letter-spacing:.02em;
     }
     .navbar a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s}
-    .navbar a:hover::after, .navbar a.active::after{
-      background:linear-gradient(90deg, var(--accent), var(--warm));
-    }
+    .navbar a:hover::after, .navbar a.active::after{ background:linear-gradient(90deg,var(--accent),var(--warm)) }
 
-    /* --- スマホ用：横3点メニュー & ドロワー --- */
+    /* --- SPメニュー（横3点）追加 --- */
     .menu-btn{
-      display:none; width:40px; height:40px; border-radius:999px;
+      display:none; margin-left:auto;
+      width:40px; height:40px; border-radius:999px;
       border:1px solid var(--line); background:#fff; cursor:pointer;
-      align-items:center; justify-content:center; margin-left:auto;
+      align-items:center; justify-content:center;
     }
-    .menu-btn .dots{display:inline-flex; align-items:center; gap:4px; transform:translateY(-1px)}
-    .menu-btn .dots b{display:block; width:3px; height:3px; border-radius:50%; background:#a24d7f}
-    @media (max-width:860px){ .navbar{display:none} .menu-btn{display:inline-flex} }
+    .menu-btn .dots{ display:inline-flex; align-items:center; gap:4px; transform:translateY(-1px) }
+    .menu-btn .dots b{ display:block; width:3px; height:3px; border-radius:50%; background:#a24d7f }
 
-    .drawer{position:fixed; inset:0; display:none; z-index:70}
+    .drawer{position:fixed; inset:0; display:none; z-index:80}
     .drawer.show{display:block}
     .drawer .back{position:absolute; inset:0; background:rgba(0,0,0,.35)}
     .drawer .panel{
@@ -59,9 +54,17 @@
       display:flex; flex-direction:column; padding:14px;
     }
     .drawer .close{align-self:flex-end; border:1px solid var(--line); background:#fff; border-radius:999px; width:36px; height:36px; cursor:pointer}
-    .drawer .logo{margin:6px 0 10px; font:700 22px "Dancing Script", cursive; color:#af4a7f}
-    .drawer nav a{display:block; padding:12px 6px; border-bottom:1px solid #f3e6ee; font:700 22px/1.2 "Dancing Script", cursive; color:#333}
-    .drawer nav a:hover{ background:linear-gradient(90deg,#ffe8f3,#ffefd9) }
+    .drawer .logo{margin:6px 0 10px; font:700 22px "Dancing Script", cursive; color:#af4a7f; text-align:left}
+    .drawer nav a{
+      display:block; padding:12px 6px; border-bottom:1px solid #f3e6ee;
+      font:700 22px/1.2 "Dancing Script", cursive; color:#333;
+    }
+    .drawer nav a:hover{ background:linear-gradient(90deg, #ffe8f3, #ffefd9) }
+
+    @media (max-width:860px){
+      .navbar{display:none}
+      .menu-btn{display:inline-flex}
+    }
 
     /* ===== ヒーロー ===== */
     .hero{
@@ -71,93 +74,72 @@
       border-top:1px solid var(--line); border-bottom:1px solid var(--line);
     }
     .hero .title{
-      margin:0; text-align:center; color:#fff;
-      text-shadow:0 6px 24px rgba(0,0,0,.25);
+      margin:0; text-align:center; color:#fff; text-shadow:0 6px 24px rgba(0,0,0,.25);
       font:700 clamp(46px,7.2vw,84px) "Dancing Script",cursive; line-height:1.05; letter-spacing:.5px;
     }
-    .hero::before,.hero::after{
-      content:""; position:absolute; left:16px; right:16px; height:1px; background:rgba(255,255,255,.9);
-    }
-    .hero::before{ top:6px } .hero::after{ top:10px; opacity:.6 }
-    .hero .wrap{ position:relative; z-index:1 }
+    .hero::before,.hero::after{content:""; position:absolute; left:16px; right:16px; height:1px; background:rgba(255,255,255,.9)}
+    .hero::before{top:6px} .hero::after{top:10px; opacity:.6}
+    .hero .wrap{position:relative; z-index:1}
 
     /* ===== パネル／フィルタ／グリッド ===== */
     main{margin-top:8px}
-    .panel{
-      background:var(--card); border:1px solid var(--line); border-radius:16px;
-      padding:14px; box-shadow:0 4px 12px rgba(0,0,0,.06);
-    }
+    .panel{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow:0 4px 12px rgba(0,0,0,.06)}
     .filters{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px}
     .chip{
       display:inline-flex; align-items:center; gap:8px;
       padding:8px 12px; border:1px solid #f0e2ea; border-radius:999px;
       background:#fff; cursor:pointer; user-select:none; font-weight:700; font-size:.95rem;
     }
-    .chip[data-active="true"]{
-      background:linear-gradient(90deg,var(--accent),var(--warm)); color:#fff; border-color:transparent;
-    }
+    .chip[data-active="true"]{ background:linear-gradient(90deg,var(--accent),var(--warm)); color:#fff; border-color:transparent }
     .count{margin-left:auto; color:var(--ink-sub); font-size:.9rem}
 
-    .grid{
-      display:grid; gap:12px;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-    }
-    @media (min-width:860px){
-      .grid{ grid-template-columns:repeat(3, minmax(0,1fr)); }
-    }
+    .grid{ display:grid; gap:12px; grid-template-columns:repeat(2, minmax(0,1fr)) }
+    @media (min-width:860px){ .grid{ grid-template-columns:repeat(3, minmax(0,1fr)) } }
 
-    /* figure の既定余白を消す＆行高の影響をゼロに */
-    .card{
-      margin:0;               /* ← 重要 */
-      line-height:0;          /* ← 画像の下に隙間が出るのを防止 */
-      border:1px solid var(--line);
-      border-radius:14px; overflow:hidden;
-      background:#fff; display:flex; align-items:center; justify-content:center;
-      aspect-ratio:4/3; position:relative; box-shadow:0 2px 8px rgba(0,0,0,.04);
-      cursor:default;
-    }
-    .card img{
-      display:block; width:100%; height:100%;  /* ← 重要：高さを明示 */
-      object-fit:cover;                         /* 全面表示（少しトリミング） */
-      object-position:center center;
-      background:#fff;
-    }
-    /* “トリミングせず余白アリで全部見せたい”なら上の cover を contain に */
-    /* .card img{ object-fit:contain; } */
-
-    /* タイトル帯は横いっぱい */
-    .cap{
-      position:absolute; left:0; right:0; bottom:0;
-      padding:10px 12px; border-top:1px solid #f1d6e5;
-      background:linear-gradient(90deg, #ffe8f3, #ffefd9);
-    }
-    .cap .t{
-      display:block; text-align:center; font-weight:700;
-      font-size:.95rem; color:#a24d7f; line-height:1.2;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    /* 画像サムネ（拡大なし） */
+    /* サムネ（クリックで拡大） */
     .card{
       border:1px solid var(--line); border-radius:14px; overflow:hidden;
       background:#fff; display:flex; align-items:center; justify-content:center;
-      aspect-ratio:4/3; position:relative; box-shadow:0 2px 8px rgba(0,0,0,.04);
-      cursor:default;
+      aspect-ratio:9/16; position:relative; box-shadow:0 2px 8px rgba(0,0,0,.04);
+      cursor:pointer;
     }
-    .card img{
-      width:100%; height:100%; object-fit:contain; display:block; background:#fff;
-    }
+    .card img{width:100%;height:100%;object-fit:contain;background:#fff;}
     .cap{
       position:absolute; left:0; right:0; bottom:0;
       padding:10px 12px; border-top:1px solid #f1d6e5;
-      background:linear-gradient(90deg, #ffe8f3, #ffefd9);
+      background:linear-gradient(90deg,#ffe8f3,#ffefd9);
     }
     .cap .t{
-      display:block; text-align:center; font-weight:700;
-      font-size:.95rem; color:#a24d7f; line-height:1.2;
+      display:block; text-align:center; font-weight:700; font-size:.95rem; color:#a24d7f; line-height:1.2;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
 
-    footer{background:#ffe9e0;text-align:center;padding:20px;margin-top:32px;border-top:1px solid var(--line)}
+    /* ===== Lightbox（全画面オーバーレイ） ===== */
+    body.noscroll{ overflow:hidden }
+    .lightbox{
+      position:fixed; inset:0; background:rgba(0,0,0,.72);
+      display:none; align-items:center; justify-content:center; z-index:100;
+      touch-action:none;
+    }
+    .lightbox.show{ display:flex }
+    .lb-img{ max-width:96vw; max-height:96vh; object-fit:contain; background:#000; display:block; border-radius:10px }
+    .lb-cap{
+      position:fixed; left:50%; bottom:14px; transform:translateX(-50%);
+      color:#fff; background:rgba(0,0,0,.45); padding:8px 12px; border-radius:12px; font-size:.95rem;
+      backdrop-filter: blur(4px);
+    }
+    .lb-close, .lb-prev, .lb-next{
+      position:fixed; top:12px; width:40px; height:40px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.35); background:rgba(0,0,0,.35); color:#fff; font-weight:700; cursor:pointer;
+      display:grid; place-items:center; backdrop-filter: blur(4px);
+    }
+    .lb-close{ right:12px }
+    .lb-prev{ left:12px; top:50%; transform:translateY(-50%) }
+    .lb-next{ right:12px; top:50%; transform:translateY(-50%) }
+
+    @media (min-width:860px){
+      .lb-prev{ left:24px } .lb-next{ right:24px } .lb-close{ top:16px; right:16px }
+    }
   </style>
 </head>
 <body>
@@ -165,6 +147,11 @@
   <header class="site-header">
     <div class="wrap bar">
       <div class="brand">Cocona Fan Site</div>
+
+      <!-- ▼SP横3点メニュー（追加） -->
+      <button class="menu-btn" id="menuBtn" aria-label="メニューを開く">
+        <span class="dots" aria-hidden="true"><b></b><b></b><b></b></span>
+      </button>
 
       <nav class="navbar" aria-label="Global">
         <a href="index.html">Top</a>
@@ -175,14 +162,9 @@
         <a href="goods.html">Goods</a>
         <a href="index.html#contact">Contact</a>
       </nav>
-
-      <!-- スマホの横3点メニュー -->
-      <button class="menu-btn" id="menuBtn" aria-label="メニューを開く" aria-controls="drawer" aria-expanded="false">
-        <span class="dots" aria-hidden="true"><b></b><b></b><b></b></span>
-      </button>
     </div>
 
-    <!-- ドロワー -->
+    <!-- ▼ドロワー（追加） -->
     <div class="drawer" id="drawer" aria-hidden="true">
       <div class="back" id="drawerBack"></div>
       <div class="panel">
@@ -203,9 +185,7 @@
 
   <!-- ヒーロー -->
   <section class="hero">
-    <div class="wrap">
-      <h1 class="title">Gallery</h1>
-    </div>
+    <div class="wrap"><h1 class="title">Gallery</h1></div>
   </section>
 
   <main class="wrap">
@@ -219,9 +199,32 @@
     </section>
   </main>
 
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lb-prev" id="lbPrev" aria-label="前へ">‹</button>
+    <img class="lb-img" id="lbImg" alt="">
+    <button class="lb-next" id="lbNext" aria-label="次へ">›</button>
+    <div class="lb-cap" id="lbCap"></div>
+    <button class="lb-close" id="lbClose" aria-label="閉じる">×</button>
+  </div>
+
   <footer class="wrap" style="text-align:center;padding:20px 0;border-top:1px solid var(--line);margin-top:8px">
     <p>© 2025 ココナファンサイト</p>
   </footer>
+
+  <!-- ▼SPメニュー制御（追加） -->
+  <script>
+    const menuBtn=document.getElementById('menuBtn');
+    const drawer=document.getElementById('drawer');
+    const drawerBack=document.getElementById('drawerBack');
+    const drawerClose=document.getElementById('drawerClose');
+    const openDrawer=()=>{ drawer.classList.add('show'); drawer.setAttribute('aria-hidden','false'); document.body.classList.add('noscroll'); };
+    const closeDrawer=()=>{ drawer.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); document.body.classList.remove('noscroll'); };
+    menuBtn?.addEventListener('click', openDrawer);
+    drawerBack?.addEventListener('click', closeDrawer);
+    drawerClose?.addEventListener('click', closeDrawer);
+    addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+  </script>
 
   <script>
     // 画像リスト（PNGのみ）
@@ -241,24 +244,34 @@
     const count = document.getElementById('count');
     const chips = document.querySelectorAll('.chip');
 
-    function cardTemplate(it){
-      return `
-        <img src="${it.src}" alt="${it.title}" loading="lazy" decoding="async">
-        <figcaption class="cap"><span class="t">${it.title}</span></figcaption>
-      `;
-    }
+    // ライトボックス要素
+    const lb      = document.getElementById('lightbox');
+    const lbImg   = document.getElementById('lbImg');
+    const lbCap   = document.getElementById('lbCap');
+    const lbPrev  = document.getElementById('lbPrev');
+    const lbNext  = document.getElementById('lbNext');
+    const lbClose = document.getElementById('lbClose');
+
+    let currentList = [];
+    let currentIndex = 0;
+
+    const cardTemplate = (it) => `
+      <img src="${it.src}" alt="${it.title}" loading="lazy" decoding="async">
+      <figcaption class="cap"><span class="t">${it.title}</span></figcaption>
+    `;
 
     function render(filter='all'){
       grid.innerHTML = '';
-      const shown = ITEMS.filter(it => filter==='all' || it.cats.includes(filter));
-      shown.forEach(it => {
+      currentList = ITEMS.filter(it => filter==='all' || it.cats.includes(filter));
+      currentList.forEach((it, idx) => {
         const fig = document.createElement('figure');
         fig.className = 'card';
-        fig.setAttribute('data-cats', it.cats.join(','));
         fig.innerHTML = cardTemplate(it);
+        fig.addEventListener('click', () => openLB(idx));
         grid.appendChild(fig);
       });
-      count.textContent = shown.length + '点';
+      count.textContent = currentList.length + '点';
+      closeLB();
     }
 
     chips.forEach(chip => {
@@ -269,19 +282,54 @@
       });
     });
 
-    render('all');
+    // ===== Lightbox =====
+    function openLB(i){
+      if(!currentList.length) return;
+      currentIndex = i;
+      updateLB();
+      lb.classList.add('show');
+      lb.setAttribute('aria-hidden','false');
+      document.body.classList.add('noscroll');
+    }
+    function closeLB(){
+      lb.classList.remove('show');
+      lb.setAttribute('aria-hidden','true');
+      document.body.classList.remove('noscroll');
+    }
+    function updateLB(){
+      const it = currentList[currentIndex];
+      lbImg.src = it.src;
+      lbImg.alt = it.title;
+      lbCap.textContent = `${it.title}  —  ${currentIndex+1} / ${currentList.length}`;
+    }
+    function nextLB(){ currentIndex = (currentIndex + 1) % currentList.length; updateLB(); }
+    function prevLB(){ currentIndex = (currentIndex - 1 + currentList.length) % currentList.length; updateLB(); }
 
-    // 3点メニュー ドロワー（他ページと同じ挙動）
-    const menuBtn   = document.getElementById('menuBtn');
-    const drawer    = document.getElementById('drawer');
-    const drawerBack= document.getElementById('drawerBack');
-    const drawerClose=document.getElementById('drawerClose');
-    const openDrawer = ()=>{ drawer.classList.add('show'); drawer.setAttribute('aria-hidden','false'); menuBtn?.setAttribute('aria-expanded','true'); }
-    const closeDrawer= ()=>{ drawer.classList.remove('show'); drawer.setAttribute('aria-hidden','true');  menuBtn?.setAttribute('aria-expanded','false'); }
-    menuBtn?.addEventListener('click', openDrawer);
-    drawerBack?.addEventListener('click', closeDrawer);
-    drawerClose?.addEventListener('click', closeDrawer);
-    addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+    lbNext.addEventListener('click', nextLB);
+    lbPrev.addEventListener('click', prevLB);
+    lbClose.addEventListener('click', closeLB);
+    lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
+    window.addEventListener('keydown', (e)=>{
+      if(lb.classList.contains('show')){
+        if(e.key === 'Escape') closeLB();
+        if(e.key === 'ArrowRight') nextLB();
+        if(e.key === 'ArrowLeft')  prevLB();
+      }
+    });
+
+    // モバイルの簡易スワイプ
+    let tX = 0, tY = 0;
+    lb.addEventListener('touchstart', (e)=>{ const t=e.touches[0]; tX=t.clientX; tY=t.clientY; }, {passive:true});
+    lb.addEventListener('touchend', (e)=>{
+      const t = e.changedTouches[0];
+      const dx = t.clientX - tX, dy = t.clientY - tY;
+      if(Math.abs(dx) > 40 && Math.abs(dy) < 60){
+        dx < 0 ? nextLB() : prevLB();
+      }
+    }, {passive:true});
+
+    // 初期描画
+    render('all');
   </script>
 </body>
 </html>
