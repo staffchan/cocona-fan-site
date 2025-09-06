@@ -93,9 +93,18 @@
     .chip[data-active="true"]{ background:linear-gradient(90deg,var(--accent),var(--warm)); color:#fff; border-color:transparent }
     .count{margin-left:auto; color:var(--ink-sub); font-size:.9rem}
 
-    .grid{ display:grid; gap:12px; grid-template-columns:repeat(2, minmax(0,1fr)) }
-    @media (min-width:860px){ .grid{ grid-template-columns:repeat(3, minmax(0,1fr)) } }
-
+    /* === ここを差し替え === */
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns: 1fr;           /* モバイルは1列（フル幅） */
+    }
+    @media (min-width:720px){
+      .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }  /* タブレットで2列 */
+    }
+    @media (min-width:980px){
+      .grid{ grid-template-columns: repeat(3, minmax(0,1fr)); }  /* PCで3列 */
+    }
     /* サムネ（クリックで拡大） */
     .card{
       border:1px solid var(--line); border-radius:14px; overflow:hidden;
@@ -139,6 +148,26 @@
 
     @media (min-width:860px){
       .lb-prev{ left:24px } .lb-next{ right:24px } .lb-close{ top:16px; right:16px }
+    }
+    /* Moviesボタン（グラデ色） */
+    .chip-movie{
+      background:linear-gradient(90deg,var(--accent),var(--warm));
+      color:#fff;
+      border-color:transparent;
+      box-shadow:0 6px 14px rgba(243,154,198,.25);
+      text-decoration:none;            /* <a>でも下線ナシ */
+    }
+    .chip-movie .i{                    /* ▶︎ の微調整 */
+      font-weight:700;
+      transform:translateY(-1px);
+    }
+    .chip-movie:hover{
+      filter:brightness(1.04);
+      transform:translateY(-1px);
+    }
+    .chip-movie:focus-visible{
+      outline:3px solid rgba(243,154,198,.55);
+      outline-offset:2px;
     }
   </style>
 </head>
@@ -191,8 +220,9 @@
   <main class="wrap">
     <section class="panel" aria-label="フィルターとギャラリー">
       <div class="filters">
-        <button class="chip" data-cat="all" data-active="true">ALL</button>
         <button class="chip" data-cat="illust">イラスト</button>
+        <a class="chip chip-movie" href="gallery_movie.html" aria-label="Moviesページへ">
+          <span class="i">▶︎</span> Movies</a>
         <span class="count" id="count">0点</span>
       </div>
       <div class="grid" id="grid"></div>

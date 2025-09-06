@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Movies | Cocona Fan Site</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fffaf7; --ink:#222; --ink-sub:#6b6464;
+      --accent:#f39ac6; --warm:#ffdfa8; --line:#f1e6ed; --card:#fff;
+      --nav-size:clamp(16px,1.9vw,22px);
+    }
+    *{box-sizing:border-box} html,body{margin:0}
+    body{
+      background:linear-gradient(180deg, rgba(255,232,243,.22), rgba(255,223,168,.14));
+      color:var(--ink);
+      font-family:"Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      line-height:1.9;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:0 16px}
+
+    /* ===== Header（PC: ナビ / SP: 横3点メニュー） ===== */
+    header{position:sticky; top:0; z-index:60; background:#fff; border-bottom:1px solid var(--line)}
+    .head{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:10px 0}
+    .brand{font:700 22px "Dancing Script", cursive; color:#af4a7f}
+
+    .nav{display:flex; gap:34px; align-items:center}
+    .nav a{
+      color:var(--ink); font-family:"Dancing Script", cursive;
+      font-weight:700; font-size:var(--nav-size); line-height:1.1; padding:8px 2px; position:relative;
+    }
+    .nav a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s}
+    .nav a:hover::after, .nav a.active::after{background:linear-gradient(90deg,var(--accent),var(--warm))}
+
+    /* 横3点メニュー */
+    .menu-btn{
+      display:none; width:40px; height:40px; border-radius:999px;
+      border:1px solid var(--line); background:#fff; cursor:pointer;
+      align-items:center; justify-content:center;
+    }
+    .menu-btn .dots{display:inline-flex; align-items:center; gap:4px; transform:translateY(-1px)}
+    .menu-btn .dots b{display:block; width:3px; height:3px; border-radius:50%; background:#a24d7f}
+
+    .drawer{position:fixed; inset:0; display:none; z-index:70}
+    .drawer.show{display:block}
+    .drawer .back{position:absolute; inset:0; background:rgba(0,0,0,.35)}
+    .drawer .panel{
+      position:absolute; top:0; right:0; width:min(78vw, 320px); height:100%;
+      background:#fff; border-left:1px solid var(--line); box-shadow:-8px 0 24px rgba(0,0,0,.18);
+      display:flex; flex-direction:column; padding:14px;
+    }
+    .drawer .close{align-self:flex-end; border:1px solid var(--line); background:#fff; border-radius:999px; width:36px; height:36px; cursor:pointer}
+    .drawer .logo{margin:6px 0 10px; font:700 22px "Dancing Script", cursive; color:#af4a7f}
+    .drawer nav a{display:block; padding:12px 6px; border-bottom:1px solid #f3e6ee; font:700 22px/1.2 "Dancing Script", cursive; color:#333}
+    .drawer nav a:hover{background:linear-gradient(90deg,#ffe8f3,#ffefd9)}
+
+    @media (max-width:860px){ .nav{display:none} .menu-btn{display:inline-flex} }
+
+    /* ===== Hero ===== */
+    .hero{
+      position:relative; display:grid; place-items:center;
+      padding:44px 0; min-height:clamp(200px,24vh,300px);
+      background:linear-gradient(90deg,#FFEAF6,#FFE1C2);
+      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    }
+    .hero .title{
+      margin:0; text-align:center; color:#fff; text-shadow:0 6px 24px rgba(0,0,0,.25);
+      font:700 clamp(46px,7.2vw,84px) "Dancing Script", cursive; line-height:1.05; letter-spacing:.5px;
+    }
+    .hero::before,.hero::after{content:""; position:absolute; left:16px; right:16px; height:1px; background:rgba(255,255,255,.9)}
+    .hero::before{top:6px} .hero::after{top:10px; opacity:.6}
+
+    /* ===== Movie grid ===== */
+    main{margin-top:10px}
+    .panel{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow:0 4px 12px rgba(0,0,0,.06)}
+    .filters{display:flex; align-items:center; gap:8px; margin-bottom:12px}
+    .count{margin-left:auto; color:var(--ink-sub); font-size:.9rem}
+
+    /* Gallery風のチップボタン */
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border:1px solid #f0e2ea; border-radius:999px;
+      background:#fff; cursor:pointer; user-select:none;
+      font-weight:700; font-size:.95rem; color:var(--ink);
+      text-decoration:none;
+    }
+    .chip-back{
+      background:linear-gradient(90deg,var(--accent),var(--warm));
+      color:#fff; border-color:transparent;
+    }
+    .chip .i{ font-weight:700; transform:translateY(-1px) }
+
+    .grid{display:grid; gap:14px; grid-template-columns:repeat(1,minmax(0,1fr))}
+    @media (min-width:720px){ .grid{ grid-template-columns:repeat(2,minmax(0,1fr)) } }
+    @media (min-width:980px){ .grid{ grid-template-columns:repeat(3,minmax(0,1fr)) } }
+
+    /* カードは 9:16 の静止画像（poster） */
+    .card{
+      position:relative; border:1px solid var(--line); border-radius:14px; overflow:hidden;
+      background:#000; box-shadow:0 2px 8px rgba(0,0,0,.05);
+      aspect-ratio:9/16; display:grid; place-items:center; cursor:pointer;
+    }
+    .thumb{width:100%; height:100%; object-fit:cover; display:block; background:#000}
+    .cap{
+      position:absolute; left:0; right:0; bottom:0; padding:10px 12px;
+      background:linear-gradient(90deg,#ffe8f3,#ffefd9); border-top:1px solid #f1d6e5;
+      color:#a24d7f; font-weight:700; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+
+    /* ===== Lightbox player ===== */
+    body.noscroll{overflow:hidden}
+    .lightbox{
+      position:fixed; inset:0; background:rgba(0,0,0,.72); display:none; align-items:center; justify-content:center; z-index:100;
+      padding: calc(env(safe-area-inset-top,0) + 0px)
+               calc(env(safe-area-inset-right,0) + 0px)
+               calc(env(safe-area-inset-bottom,0) + 0px)
+               calc(env(safe-area-inset-left,0) + 0px);
+    }
+    .lightbox.show{display:flex}
+
+    .player{
+      width:min(96vw, 1100px);
+      background:#000; border-radius:12px; overflow:hidden;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      position:relative; display:flex; align-items:center; justify-content:center;
+    }
+    .player video{
+      display:block; width:auto; height:auto;
+      max-width:96vw; max-height:96vh;
+      object-fit:contain; object-position:center center; background:#000;
+    }
+
+    /* フルスクリーン */
+    .player:fullscreen,
+    .player:-webkit-full-screen { width:100vw; height:100vh; border-radius:0 }
+    .player:fullscreen video,
+    video:fullscreen,
+    .player:-webkit-full-screen video,
+    video:-webkit-full-screen{
+      width:auto; height:auto; max-width:100vw; max-height:100vh;
+      object-fit:contain; object-position:center center;
+    }
+
+    /* ライトボックス UI */
+    .lb-cap{
+      position:absolute; left:50%; bottom:10px; transform:translateX(-50%);
+      color:#fff; background:rgba(0,0,0,.45); padding:8px 12px; border-radius:12px; font-size:.95rem; backdrop-filter:blur(4px)
+    }
+    .lb-btn{position:absolute; top:10px; width:40px; height:40px; border-radius:999px; border:1px solid rgba(255,255,255,.35);
+      background:rgba(0,0,0,.35); color:#fff; font-weight:700; cursor:pointer; display:grid; place-items:center; backdrop-filter:blur(4px)}
+    .lb-close{right:10px}
+    .lb-full{right:58px}
+    .lb-close-bottom{
+      position:absolute; left:50%; bottom:56px; transform:translateX(-50%);
+      width:auto; height:auto; padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.35); background:rgba(0,0,0,.35); color:#fff; font-weight:700; cursor:pointer;
+      backdrop-filter:blur(4px);
+    }
+
+    /* フルスクリーン中はオーバーレイ UI を消す（×などが邪魔にならないように） */
+    .player:fullscreen .lb-btn,
+    .player:fullscreen .lb-cap,
+    .player:fullscreen .lb-close-bottom,
+    .player:-webkit-full-screen .lb-btn,
+    .player:-webkit-full-screen .lb-cap,
+    .player:-webkit-full-screen .lb-close-bottom{
+      display:none !important;
+    }
+    /* --- スマホでは上部の丸ボタン（拡大・×）を隠す --- */
+    @media (max-width: 860px){
+      .lb-full,
+      .lb-close{
+        display: none !important;
+      }
+    }
+
+    /* iOS/Safari のネイティブ FS/PiP ボタンを非表示（保険） */
+    #bigVideo::-webkit-media-controls-fullscreen-button,
+    #bigVideo::-webkit-media-controls-picture-in-picture-button{ display:none !important; }
+
+    /* iOS では video に触らず上のレイヤーで操作（controlsを出さない） */
+    .is-ios #bigVideo{ pointer-events:none; }
+    .tap-layer{
+      position:absolute; inset:0; display:none;
+    }
+    .is-ios .tap-layer{ display:block; } /* iOSのみ有効 */
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="wrap head">
+      <div class="brand">Cocona Fan Site</div>
+      <nav class="nav" aria-label="Global">
+        <a href="index.html">Top</a>
+        <a href="about_cocona.html">About</a>
+        <a href="story.html">Story</a>
+        <a class="active" href="gallery.html">Gallery</a>
+        <a href="songs.html">Songs</a>
+        <a href="goods.html">Goods</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <button class="menu-btn" id="menuBtn" aria-label="メニューを開く">
+        <span class="dots" aria-hidden="true"><b></b><b></b><b></b></span>
+      </button>
+    </div>
+    <!-- Drawer -->
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <div class="back" id="drawerBack"></div>
+      <div class="panel">
+        <button class="close" id="drawerClose" aria-label="閉じる">✕</button>
+        <div class="logo">Cocona Fan Site</div>
+        <nav aria-label="Global mobile">
+          <a href="index.html">Top</a>
+          <a href="about_cocona.html">About</a>
+          <a href="story.html">Story</a>
+          <a class="active" href="gallery.html" aria-current="page">Gallery</a>
+          <a href="songs.html">Songs</a>
+          <a href="goods.html">Goods</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1 class="title">Movies</h1>
+  </section>
+
+  <main class="wrap">
+    <section class="panel" aria-label="ムービー">
+      <div class="filters">
+        <a class="chip chip-back" href="gallery.html" aria-label="Galleryへ戻る">
+          <span class="i">◀︎</span> イラスト</a>
+        <strong style="margin-left:4px">Movies</strong>
+        <span class="count" id="count" style="margin-left:auto">0本</span>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="player" id="player">
+      <video id="bigVideo"
+             playsinline webkit-playsinline
+             preload="metadata"
+             controlslist="nodownload noplaybackrate noremoteplayback nofullscreen"
+             disablepictureinpicture
+             x-webkit-airplay="deny"></video>
+      <div class="tap-layer" id="tapLayer" aria-hidden="true"></div>
+      <div class="lb-cap" id="lbCap"></div>
+      <button class="lb-btn lb-full" id="lbFull" aria-label="全画面">⤢</button>
+      <button class="lb-btn lb-close" id="lbClose" aria-label="閉じる">×</button>
+      <button class="lb-close-bottom" id="lbCloseBottom" aria-label="閉じる">閉じる</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap"><p>© 2025 ココナファンサイト</p></div>
+  </footer>
+
+  <script>
+    /* ====== 動画リスト ====== */
+    const MOVIES = [
+      {src:'gallery/movie/start.MP4',  title:'始まりの物語'},
+      {src:'gallery/movie/runrunrun.MP4', title:'爆走ココナ'},
+      {src:'gallery/movie/trip.MP4',   title:'旅立ちの日'},
+      {src:'gallery/movie/Dance1.MP4', title:'ダンシングココナ1'},
+      {src:'gallery/movie/Dance2.MP4', title:'ダンシングココナ2'},
+      {src:'gallery/movie/Dance3.MP4', title:'ダンシングココナ3'},
+      {src:'gallery/movie/Song1.MP4',  title:'歌うココナ1'},
+    ];
+
+    /* ====== iOS 判定 ====== */
+    const IS_IOS =
+      /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    /* ====== DOM ====== */
+    const grid   = document.getElementById('grid');
+    const count  = document.getElementById('count');
+    const lb     = document.getElementById('lightbox');
+    const player = document.getElementById('player');
+    const big    = document.getElementById('bigVideo');
+    const tapLay = document.getElementById('tapLayer');
+    const lbCap  = document.getElementById('lbCap');
+    const lbClose= document.getElementById('lbClose');
+    const lbCloseBottom = document.getElementById('lbCloseBottom');
+    const lbFull = document.getElementById('lbFull');
+
+    /* ====== Drawer ====== */
+    const menuBtn   = document.getElementById('menuBtn');
+    const drawer    = document.getElementById('drawer');
+    const drawerBack= document.getElementById('drawerBack');
+    const drawerClose=document.getElementById('drawerClose');
+    const openDrawer = ()=>{ drawer.classList.add('show'); drawer.setAttribute('aria-hidden','false'); }
+    const closeDrawer= ()=>{ drawer.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); }
+    menuBtn?.addEventListener('click', openDrawer);
+    drawerBack?.addEventListener('click', closeDrawer);
+    drawerClose?.addEventListener('click', closeDrawer);
+    addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+
+    /* ====== パス候補（未エンコード / NFC / NFD / encodeURI） ====== */
+    const candidatesFor = (raw) => {
+      const nfc = raw.normalize('NFC');
+      const nfd = raw.normalize('NFD');
+      return [...new Set([raw, nfc, nfd, encodeURI(raw), encodeURI(nfc), encodeURI(nfd)])];
+    };
+
+    function attachSrc(videoEl, raw){
+      return new Promise(async (resolve, reject)=>{
+        for(const p of candidatesFor(raw)){
+          try{
+            await new Promise((ok, ng)=>{
+              const onMeta = ()=>{ cleanup(); ok(); };
+              const onErr  = ()=>{ cleanup(); ng(new Error('load-error')); };
+              const cleanup= ()=>{
+                videoEl.removeEventListener('loadedmetadata', onMeta);
+                videoEl.removeEventListener('error', onErr);
+              };
+              videoEl.addEventListener('loadedmetadata', onMeta, {once:true});
+              videoEl.addEventListener('error', onErr, {once:true});
+              videoEl.src = p; videoEl.load();
+            });
+            resolve(p); return;
+          }catch(_){}
+        }
+        reject(new Error('all-candidates-failed'));
+      });
+    }
+
+    /* ====== サムネ（poster） ====== */
+    function posterFor(src){
+      const m = src.match(/^(.*\/)?([^\/]+)\.(mp4|MP4|mov|MOV|webm)$/);
+      const dir = m?.[1] || '';
+      const base= m?.[2] || src;
+      return `${dir}${base}_poster.jpg`;
+    }
+
+    function cardTemplate(item){
+      const poster = posterFor(item.src);
+      return `
+        <img class="thumb" src="${poster}" alt="${item.title || ''}" loading="lazy" decoding="async"
+             onerror="this.style.objectFit='contain'; this.style.background='#111';" />
+        <div class="cap">${item.title || ''}</div>
+      `;
+    }
+
+    function render(){
+      grid.innerHTML = '';
+      MOVIES.forEach((mv)=>{
+        const fig = document.createElement('figure');
+        fig.className = 'card';
+        fig.innerHTML = cardTemplate(mv);
+        fig.addEventListener('click', ()=> openLB(mv)); // クリックで再生
+        grid.appendChild(fig);
+      });
+      count.textContent = `${MOVIES.length}本`;
+    }
+
+    /* ====== フルスクリーン補助（player だけに要求） ====== */
+    function isFS(){
+      return !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+    }
+    async function requestFS(){
+      if (player.requestFullscreen) { await player.requestFullscreen(); return true; }
+      if (player.webkitRequestFullscreen) { player.webkitRequestFullscreen(); return true; }
+      if (player.msRequestFullscreen) { player.msRequestFullscreen(); return true; }
+      return false;
+    }
+    function exitFS(){
+      if (document.exitFullscreen) return document.exitFullscreen();
+      if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+      if (document.msExitFullscreen) return document.msExitFullscreen();
+    }
+
+    /* ====== Lightbox ====== */
+    async function openLB(item){
+      document.body.classList.add('noscroll');
+      lb.classList.add('show');
+      lb.setAttribute('aria-hidden','false');
+
+      // iOS: controls を出さない（拡大矢印回避）
+      if (IS_IOS) {
+        document.body.classList.add('is-ios');
+        big.controls = false;
+      } else {
+        big.controls = true;
+      }
+
+      big.pause(); big.removeAttribute('src'); big.load();
+      big.playsInline = true;
+      big.muted = false; // クリック起点なので音ありでもOK（失敗時はユーザー操作待ち）
+      lbCap.textContent = item.title || '';
+
+      // ソース設定
+      await attachSrc(big, item.src).catch(()=>{ /* 失敗時はそのまま */ });
+
+      // 同一クリックでフルスクリーン要求（失敗してもOK）
+      await requestFS().catch(()=>{});
+
+      // 再生開始
+      try { await big.play(); } catch(e){ /* ユーザー操作待ちでもOK */ }
+    }
+
+    function closeLB(){
+      lb.classList.remove('show');
+      lb.setAttribute('aria-hidden','true');
+      document.body.classList.remove('noscroll');
+      big.pause(); big.removeAttribute('src'); big.load();
+      if (isFS()) exitFS();
+    }
+
+    // クリック操作
+    lbClose.addEventListener('click', closeLB);
+    lbCloseBottom.addEventListener('click', closeLB);
+    lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLB(); });
+
+    // iOS用：タップレイヤーで再生/一時停止（controls を使わないため）
+    tapLay.addEventListener('click', ()=>{
+      if (big.paused) big.play().catch(()=>{}); else big.pause();
+    });
+
+    // フルスクリーンの変化を監視：抜けたらライトボックスも閉じる
+    ['fullscreenchange','webkitfullscreenchange','msfullscreenchange'].forEach(ev=>{
+      document.addEventListener(ev, ()=>{
+        const fsEl = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+        if (!fsEl && lb.classList.contains('show')) closeLB();
+      });
+    });
+
+    // 任意：FSトグルボタン（PC向け）
+    lbFull.addEventListener('click', ()=>{ if (isFS()) exitFS(); else requestFS(); });
+
+    /* ====== 初期描画 ====== */
+    render();
+  </script>
+</body>
+</html>
